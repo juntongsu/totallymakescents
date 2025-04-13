@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from collections import Counter
 
-old = pd.read_csv('Perfume1.csv')
+old = pd.read_csv('../../data/classified_comments_with_details.csv')
 df = old[['User ID', 'User Name', 'Perfume ID', 'Perfume Name','Sentiment']]
 df = df.dropna()
 
