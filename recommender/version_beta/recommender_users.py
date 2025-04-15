@@ -93,6 +93,7 @@ def recommender_users(user_1,frame_1,frame_2 = persian_data_frame_clean, commona
 ### cleans input.csv
 
 user_frame = pd.read_csv('input.csv')
+user_frame.columns = ["Perfume Name","Sentiment"]
 
 ##For use if storing/collecting data. Set to 0 for now as we are not collecting user data
 user_id = 0 
