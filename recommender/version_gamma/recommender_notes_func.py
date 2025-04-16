@@ -33,7 +33,7 @@ def find_overlap(df_persian, df_data_notes, language):
     
     perf_name_overlap = pd.Series(perf_name_overlap, dtype='string').rename('Perfume')
     perf_url_overlap = pd.Series(perf_url_overlap, dtype='string').rename('url')
-    print('Found {} overlap perfumes between datasets'.format(len(perf_name_overlap)))
+    # print('Found {} overlap perfumes between datasets'.format(len(perf_name_overlap)))
     perf_overlap = pd.concat([perf_name_overlap, perf_url_overlap], axis=1)
     return perf_overlap
 
