@@ -85,7 +85,7 @@ def add_user_id(frame, user_id = 0):
 user_frame = add_user_id(user_frame)
 
 
-lazy_list = lazy_recommender(user_id, user_frame, commonality-2)
+lazy_list = lazy_recommender(user_id, user_frame)
 
 print(lazy_list)
 
