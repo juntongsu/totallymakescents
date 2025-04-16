@@ -5,7 +5,6 @@ from recommender_users_func import *
 from recommender_notes_func import *
 
 df_persian = pd.read_csv(path_data + 'Persian_Data.csv')
-# old = pd.read_csv('../../data/Persian_Data.csv')
 df_persian_new = df_persian[['User ID', 'Perfume Name','Perfume ID', 'Sentiment']]
 df_persian_new = df_persian_new.dropna()
 
