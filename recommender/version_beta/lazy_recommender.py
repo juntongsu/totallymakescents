@@ -64,7 +64,7 @@ def lazy_ratings(user_1,frame_1,frame_2, commonality=1, type = "sum"):
 
     return adjusted_ratings
 
-def lazy_recommender(user_1,frame_1,frame_2 = persian_data_frame_clean, commonality=2, top=20, type="sum"):
+def lazy_recommender(user_1,frame_1,frame_2 = persian_data_frame_clean, commonality=1, top=20, type="sum"):
     adjusted_ratings = lazy_ratings(user_1,frame_1,frame_2, commonality, type)
     rec_list = adjusted_ratings.convert_dtypes().nlargest(top, 'Similarity', keep = "all")
     
