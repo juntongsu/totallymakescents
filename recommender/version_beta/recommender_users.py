@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 ###Cleaning up Data Frame
 
 old = pd.read_csv('../../data/Persian_Data.csv')
-df = old[['User ID', 'Perfume Name','Sentiment']]
+df = old[['User ID', 'Perfume ID', 'Perfume Name','Sentiment']]
 df = df.dropna()
 
 ##Remove perfumes with same name and different ids
