@@ -34,7 +34,7 @@ user_recommendation_list = recommender_users(user_id, user_frame, persian_data_f
 
 
 
-language = 1
+language = 0
 if language == 0:
     df_fra = pd.read_csv(path_data + 'fra_cleaned.csv', sep=';', encoding='latin-1')
     perf_overlap = find_overlap(df_persian, df_fra, language)
