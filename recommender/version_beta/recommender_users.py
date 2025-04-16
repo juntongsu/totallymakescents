@@ -107,7 +107,7 @@ def add_user_id(frame, user_id = 0):
 user_frame = add_user_id(user_frame)
 
 
-user_recommendation_list = recommender_users(user_id, user_frame)
+user_recommendation_list = recommender_users(user_id, user_frame, weight=2)
 
 print(user_recommendation_list)
 
