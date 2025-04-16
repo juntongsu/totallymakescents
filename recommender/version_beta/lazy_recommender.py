@@ -31,22 +31,25 @@ persian_data_frame_clean.update(persian_data_frame_clean["Sentiment"].apply(enum
 #####
 
 
-def has_opinions(user, frame):
+ef has_opinions(user, frame):
     return set(frame.loc[(frame['User ID'] == user)]["Perfume Name"])
 
-def share_opinions(user_1, user_2, frame_1,frame_2):
-    return has_opinions(user_1,frame_1).intersection(has_opinions(user_2,frame_2))
+def has_positive_opinions(user, frame):
+    return set(frame.loc[((frame['User ID'] == user)&(frame["Sentiment"]==1.0))]["Perfume Name"])
 
-def reference_users(user_1, frame_1,frame_2, commonality=1):
+def share_positive_opinions(user_1, user_2, frame_1,frame_2):
+    return has_positive_opinions(user_1,frame_1).intersection(has_positive_opinions(user_2,frame_2))
+
+def positive_reference_users(user_1, frame_1,frame_2, commonality=1):
     users= set(frame_2['User ID'])
     relevant_users=set()
     for user_2 in users:
-        if len(share_opinions(user_1,user_2,frame_1,frame_2))>= commonality:
+        if len(share_positive_opinions(user_1,user_2,frame_1,frame_2))>= commonality:
             relevant_users.add(user_2)
-    return relevant_users
-
+    return relevant_users 
+ 
 def lazy_frame(user_1,frame_1,frame_2, commonality=1):
-    relevant_users = reference_users(user_1, frame_1,frame_2, commonality)
+    relevant_users = positive_reference_users(user_1, frame_1,frame_2, commonality)
     new_frame = frame_2.loc[(frame_2['User ID'].isin(relevant_users))]
     return new_frame
 
@@ -66,7 +69,6 @@ def lazy_recommender(user_1,frame_1,frame_2 = persian_data_frame_clean, commonal
     rec_list = adjusted_ratings.convert_dtypes().nlargest(top, 'Similarity', keep = "all")
     
     return rec_list[["Perfume Name", "Similarity"]]
-
 
 ### cleans input.csv
 
