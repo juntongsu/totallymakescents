@@ -65,17 +65,21 @@ def cos_index_1(user_1,user_2,frame_1,frame_2):
     vector_2 = sentiment_vector(user_2, frame_2, shared)
     return cosine_similarity([vector_1],[vector_2])[0][0]
 
-def adjust_rating_1(rating,user_1,user_2,frame_1,frame_2,weight=1.0):
-    return rating*cos_index_1(user_1,user_2,frame_1,frame_2)*accuracy_index(user_1, user_2, frame_1,frame_2,weight)
+def multiplier(user_1,user_2,frame_1,frame_2,weight=1.0):
+    return cos_index_1(user_1,user_2,frame_1,frame_2)*accuracy_index(user_1, user_2, frame_1,frame_2,weight)
+
+def adjust_rating_1(rating, multi):
+    return rating*multi
 
 def adjusted_frame_1(user_1,frame_1,frame_2, commonality=1,weight = 1.0):
     relevant_users = reference_users(user_1, frame_1,frame_2, commonality)
     new_frame = frame_2.loc[(frame_2['User ID'].isin(relevant_users))]
     for user_2 in relevant_users:
-        adjust = new_frame.loc[(new_frame['User ID']==user_2), "Sentiment"].apply(adjust_rating_1,args=(user_1,user_2,frame_1,frame_2,weight))
+        m = multiplier(user_1,user_2,frame_1,frame_2,weight)
+        adjust = new_frame.loc[(new_frame['User ID']==user_2), "Sentiment"].apply(adjust_rating_1,args=([m]))
         new_frame.update(adjust)
     return new_frame
-
+    
 def ratings(user_1,frame_1,frame_2, commonality=1,weight=1.0):
     known_perfumes = has_opinions(user_1, frame_1)
 
