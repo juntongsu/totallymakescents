@@ -8,6 +8,10 @@ old = pd.read_csv('../../data/Persian_Data.csv')
 df = old[['User ID', 'Perfume Name','Sentiment']]
 df = df.dropna()
 
+##Remove perfumes with same name and different ids
+black_list = {15195,9500,15615}
+df = df.loc[(~df["Perfume ID"].isin(black_list))][['User ID','Perfume Name','Sentiment']]
+
 user_ids = df['User ID'].unique()
 user_frame = pd.DataFrame({'User ID':user_ids})
 user_samp = user_frame.sample(frac=0.80, random_state=13)
