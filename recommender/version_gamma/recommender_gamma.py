@@ -34,7 +34,7 @@ user_recommendation_list = recommender_users(user_id, user_frame, persian_data_f
 
 
 
-language = 0
+language = 1
 if language == 0:
     df_fra = pd.read_csv(path_data + 'fra_cleaned.csv', sep=';', encoding='latin-1')
     perf_overlap = find_overlap(df_persian, df_fra, language)
@@ -108,7 +108,7 @@ if df_rec_list.value_counts().values[0] == 1:
         recommendation_list = ', '.join([recommendation_list, ', '.join(user_rec_list[n_user_rec+1:].values)])
     recommendation_list = recommendation_list.split(', ')
 
-# overlap
+### overlap
 else:
     n_common = len(df_rec_list.value_counts().values[df_rec_list.value_counts().values > 1])
     n_common = 2
