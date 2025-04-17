@@ -4,7 +4,7 @@ import numpy as np
 import sys 
 import pathlib
 import time
-sys.path.append('../')
+sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
