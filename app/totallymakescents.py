@@ -2,15 +2,15 @@ import streamlit as st
 import pandas as pd 
 import numpy as np 
 import sys 
-sys.path.append('../')
+sys.path.append('../recommender/version_gamma/')
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
 path_data = path_total + 'data/'
 path_rec = path_total + 'recommender/'
 
-from recommender.version_gamma.recommender_notes_func import *
-from recommender.version_gamma.recommender_users_func import *
+from recommender_notes_func import *
+from recommender_users_func import *
 
 # user_frame = pd.read_csv('{}input.csv'.format(path_app), header=None)
 # user_frame.columns = ["Perfume Name", "Sentiment"]
