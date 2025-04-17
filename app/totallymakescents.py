@@ -1,9 +1,8 @@
 import streamlit as st 
 import pandas as pd 
 import numpy as np 
-import pathlib
 import sys 
-sys.path.append(str(pathlib.Path(__file__).parent.parent))
+sys.path.append('../')
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
