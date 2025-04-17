@@ -123,6 +123,25 @@ vec_top = pd.read_csv('{}cleaned_vec_top_{}.csv'.format(path_data, language))
 vec_mid = pd.read_csv('{}cleaned_vec_mid_{}.csv'.format(path_data, language))
 vec_base = pd.read_csv('{}cleaned_vec_base_{}.csv'.format(path_data, language))
 
+dict_slider = {'Extremely Extraverted': -1, }
+
 if make_button:
-    client_perfume = client_perfume_0 + client_perfume_1
-    client_perfume
+    client_perfume = pd.Series((client_perfume_0 + client_perfume_1), dtype='string', name='Perfume Name')
+    client_sentiment = pd.Series((np.concatenate((np.ones(len(client_perfume_0), dtype=int), np.ones(len(client_perfume_1), dtype=int)*(-1)))), dtype='int', name='Sentiment')
+    df_client = pd.concat([client_perfume, client_sentiment], axis=1)
+
+    client_id = 0 
+    client_frame = add_user_id(df_client)
+    user_recommendation_list = recommender_users(client_id, client_frame, persian_data_frame_clean)
+
+    client_top, client_mid, client_base = user_vec_prep(client_perfume, client_sentiment, perf_names, vec_top, vec_mid, vec_base)
+    temperature = np.array((1, 2, 1, 1.5), dtype=int)
+    note_recommendation_list = recommender_notes(perf_names, vec_top, vec_mid, vec_base, client_perfume, client_top, client_mid, client_base, temperature)
+    
+    user_rec_list = user_recommendation_list['Perfume Name'].reset_index(drop=True)
+    note_rec_list = note_recommendation_list['Perfume'].reset_index(drop=True)
+    df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1).head(20)
+    df_rec_list
+
+    n_recs = 20
+    slider = tf_slider
