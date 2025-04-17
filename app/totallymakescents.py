@@ -17,17 +17,11 @@ from recommender.version_gamma.recommender_users_func import *
 # user_frame.columns = ["Perfume Name", "Sentiment"]
 
 st.title('TotallyMakeScents')
-
-# st.text('What’s it smell like in the rain, at the end of a hiking trail full of blossoms?')
-# st.text('What fragrance would a wizard wear in a magical world?')
-# st.text('Looking for a bittersweet scent for a farewell party.')
-# st.subheader('Tell us about your stroy, and we MAKESCENTS.')
 st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your stroy, and we MAKESCENTS.")
 
 language = 0
 df_perf_names = pd.read_csv('{}cleaned_perf_names_{}.csv'.format(path_data, language))
 perf_names = df_perf_names['Perfume']
-sentiment_list = ['I like it!', "I don't like it."]
 
 # input_left_column_0, input_right_column_0 = st.columns(2)
 client_perfume_0 = st.multiselect(
@@ -120,6 +114,15 @@ jp_slider = st.select_slider(
 )
 
 button_left_column, button_mid_column, button_right_column = st.columns(3)
-button_mid_column.button(
+make_button = button_mid_column.button(
     'Totally Make Scents!',
     type='primary')
+
+persian_data_frame_clean = pd.read_csv('{}cleaned_persian.csv'.format(path_data))
+vec_top = pd.read_csv('{}cleaned_vec_top_{}.csv'.format(path_data, language))
+vec_mid = pd.read_csv('{}cleaned_vec_mid_{}.csv'.format(path_data, language))
+vec_base = pd.read_csv('{}cleaned_vec_base_{}.csv'.format(path_data, language))
+
+if make_button:
+    client_perfume = client_perfume_0 + client_perfume_1
+    client_perfume
