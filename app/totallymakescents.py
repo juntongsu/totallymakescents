@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd 
 import numpy as np 
 import sys 
-import pathlib 
-sys.path.append(str(pathlib.Path(__file__)) + '../recommender/version_gamma/')
+sys.path.append('../recommender/version_gamma/')
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
