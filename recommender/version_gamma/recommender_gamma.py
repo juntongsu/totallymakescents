@@ -35,14 +35,19 @@ user_recommendation_list = recommender_users(user_id, user_frame, persian_data_f
 
 
 language = 0
-if language == 0:
-    df_fra = pd.read_csv(path_data + 'fra_cleaned.csv', sep=';', encoding='latin-1')
-    perf_overlap = find_overlap(df_persian, df_fra, language)
-    perf_names, vec_top, vec_mid, vec_base = notes_vec_prep(perf_overlap, df_fra, language)
-elif language == 1:
-    df_aromo = pd.read_csv(path_data + 'aromo_ru.csv', sep=';', dtype=object)
-    perf_overlap = find_overlap(df_persian, df_aromo, language)
-    perf_names, vec_top, vec_mid, vec_base = notes_vec_prep(perf_overlap, df_aromo, language)
+# if language == 0:
+#     df_fra = pd.read_csv(path_data + 'fra_cleaned.csv', sep=';', encoding='latin-1')
+#     perf_overlap = find_overlap(df_persian, df_fra, language)
+#     perf_names, vec_top, vec_mid, vec_base = notes_vec_prep(perf_overlap, df_fra, language)
+# elif language == 1:
+#     df_aromo = pd.read_csv(path_data + 'aromo_ru.csv', sep=';', dtype=object)
+#     perf_overlap = find_overlap(df_persian, df_aromo, language)
+#     perf_names, vec_top, vec_mid, vec_base = notes_vec_prep(perf_overlap, df_aromo, language)
+
+perf_names = pd.read_csv('{}cleaned_perf_names_{}.csv'.format(path_data, language))
+vec_top = pd.read_csv('{}cleaned_vec_top_{}.csv'.format(path_data, language))
+vec_mid = pd.read_csv('{}cleaned_vec_mid_{}.csv'.format(path_data, language))
+vec_base = pd.read_csv('{}cleaned_vec_base_{}.csv'.format(path_data, language))
 
 nUsers = 1
 for i in range(nUsers):
