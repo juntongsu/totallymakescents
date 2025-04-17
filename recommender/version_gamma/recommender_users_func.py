@@ -70,7 +70,7 @@ def ratings(user_1,frame_1,frame_2, commonality=1,weight=0, type = "mean"):
 
     return adjusted_ratings
 
-def recommender_users(user_1,frame_1,frame_2 = persian_data_frame_clean, commonality=2,weight=0, top=20, type="mean"):
+def recommender_users(user_1,frame_1,frame_2, commonality=2,weight=0, top=20, type="mean"):
     adjusted_ratings = ratings(user_1,frame_1,frame_2, commonality, weight, type)
     rec_list = adjusted_ratings.convert_dtypes().nlargest(top, 'Similarity', keep = "all")
     
