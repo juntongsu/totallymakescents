@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd 
 import numpy as np 
 
-user_frame = pd.read_csv('input.csv', header=None)
+user_frame = pd.read_csv('./input.csv', header=None)
 user_frame.columns = ["Perfume Name", "Sentiment"]
 
 sentiment_list = ['I like it!', "I don't like it."]
