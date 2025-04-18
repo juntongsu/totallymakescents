@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 #from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 
-hit_test = pd.read_csv('data/final_hit_results.csv')
+hit_test = pd.read_csv('../data/final_hit_results.csv')
 
 X = hit_test["Known Perfumes"].to_numpy().reshape(-1, 1)
 Y_rng = hit_test["RNG"].to_numpy().reshape(-1, 1)
