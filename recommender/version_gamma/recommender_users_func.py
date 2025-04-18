@@ -24,7 +24,7 @@ def reference_users(user_1, frame_1,frame_2, commonality=1):
             relevant_users.add(user_2)
     return relevant_users
 
-def accuracy_index(user_1, user_2, frame_1,frame_2, weight = 1.0):
+def accuracy_index(user_1, user_2, frame_1,frame_2, weight = 1):
     ind = len(share_opinions(user_1, user_2, frame_1,frame_2))/len(has_opinions(user_1, frame_1))
     return ind**weight
 
@@ -50,7 +50,7 @@ def multiplier(user_1,user_2,frame_1,frame_2,weight=1.0):
 def adjust_rating_1(rating, multi):
     return rating*multi
 
-def adjusted_frame_1(user_1,frame_1,frame_2, commonality=1,weight = 1.0):
+def adjusted_frame_1(user_1,frame_1,frame_2, commonality=1,weight = 1):
     relevant_users = reference_users(user_1, frame_1,frame_2, commonality)
     new_frame = frame_2.loc[(frame_2['User ID'].isin(relevant_users))]
     for user_2 in relevant_users:
@@ -59,7 +59,7 @@ def adjusted_frame_1(user_1,frame_1,frame_2, commonality=1,weight = 1.0):
         new_frame.update(adjust)
     return new_frame
 
-def ratings(user_1,frame_1,frame_2, commonality=1,weight=0, type = "mean"):
+def ratings(user_1,frame_1,frame_2, commonality=1,weight=1, type = "sum"):
     known_perfumes = has_opinions(user_1, frame_1)
 
     adjusted_ratings = adjusted_frame_1(user_1,frame_1,frame_2,commonality,weight)
@@ -70,7 +70,7 @@ def ratings(user_1,frame_1,frame_2, commonality=1,weight=0, type = "mean"):
 
     return adjusted_ratings
 
-def recommender_users(user_1,frame_1,frame_2, commonality=2,weight=0, top=20, type="mean"):
+def recommender_users(user_1,frame_1,frame_2, commonality=2,weight=1, top=20, type="sum"):
     adjusted_ratings = ratings(user_1,frame_1,frame_2, commonality, weight, type)
     rec_list = adjusted_ratings.convert_dtypes().nlargest(top, 'Similarity', keep = "all")
     
