@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 #from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 
-sentiment_test = pd.read_csv('data/final_sentiment_results.csv')
+sentiment_test = pd.read_csv('../data/final_sentiment_results.csv')
 
 X = sentiment_test["Known Perfumes"].to_numpy().reshape(-1, 1)
 Y_user = sentiment_test["User Similarity"].to_numpy().reshape(-1, 1)
