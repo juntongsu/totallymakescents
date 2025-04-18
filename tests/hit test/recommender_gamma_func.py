@@ -1,4 +1,4 @@
-home = ''
+home = '../../'
 path_data = home + 'data/'
 
 from recommender_users_func import *
