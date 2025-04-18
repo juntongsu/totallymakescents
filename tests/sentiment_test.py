@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 ###Cleaning up Persian Data Frame
 
-old = pd.read_csv('data/Persian_Data.csv')
+old = pd.read_csv('../data/Persian_Data.csv')
 df = old[['User ID', 'Perfume ID','Perfume Name','Sentiment']]
 df = df.dropna()
 
