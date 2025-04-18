@@ -26,9 +26,13 @@ user_frame.columns = ["Perfume Name","Sentiment"]
 
 user_id = 0 
 user_frame = add_user_id(user_frame)
-user_recommendation_list = recommender_users(user_id, user_frame, persian_data_frame_clean)
 
+review_count = len(user_frame.index)
 
+if review_count>19:
+    user_recommendation_list = recommender_users(user_id, user_frame, persian_data_frame_clean)
+else:
+    user_recommendation_list = lazy_recommender(user_id, user_frame, persian_data_frame_clean)
 
 
 
