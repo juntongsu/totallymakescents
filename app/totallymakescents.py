@@ -5,15 +5,14 @@ import sys
 import pathlib
 import time
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
+# path_total = '../'
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
 path_data = path_total + 'data/'
 path_rec = path_total + 'recommender/'
 
-from recommender.version_gamma.recommender_notes_func import *
-from recommender.version_gamma.recommender_users_func import *
-from recommender.version_gamma.combine_rec_lists_func import *
+from recommender.version_delta.recommender_func import *
 
 # user_frame = pd.read_csv('{}input.csv'.format(path_app), header=None)
 # user_frame.columns = ["Perfume Name", "Sentiment"]
@@ -125,32 +124,45 @@ vec_top = pd.read_csv('{}cleaned_vec_top_{}.csv'.format(path_data, language))
 vec_mid = pd.read_csv('{}cleaned_vec_mid_{}.csv'.format(path_data, language))
 vec_base = pd.read_csv('{}cleaned_vec_base_{}.csv'.format(path_data, language))
 
-dict_slider = {'Extremely Thinking (T)': 0., 'Thinking (T)': 0.2, 'Just A Little T': 0.4, 
-                'Neutral': 0.5, 
-                'Just A Little F': 0.6, 'Feeling (F)': 0.8, 'Extremely Feeling (F)': 1.}
-
 if make_button:
     make_progress_bar = st.progress(0, text='Making Scents...')
     client_perfume = pd.Series((client_perfume_0 + client_perfume_1), dtype='string', name='Perfume Name')
     client_sentiment = pd.Series((np.concatenate((np.ones(len(client_perfume_0), dtype=int), np.ones(len(client_perfume_1), dtype=int)*(-1)))), dtype='int', name='Sentiment')
     df_client = pd.concat([client_perfume, client_sentiment], axis=1)
-
     client_id = 0 
     client_frame = add_user_id(df_client)
-    make_progress_bar.progress(30, text='Making Scents...')
-    user_recommendation_list = recommender_users(client_id, client_frame, persian_data_frame_clean)
+    make_progress_bar.progress(30, text='Making Scents from Users Like You...')
 
-    client_top, client_mid, client_base = user_vec_prep(client_perfume, client_sentiment, perf_names, vec_top, vec_mid, vec_base)
-    temperature = np.array((1, 2, 1, 1.5), dtype=int)
-    make_progress_bar.progress(70, text='Making Scents...')
-    note_recommendation_list = recommender_notes(perf_names, vec_top, vec_mid, vec_base, client_perfume, client_top, client_mid, client_base, temperature)
+    if len(client_sentiment) == 0:
+        df_rec_list = recommender_newbie(path_data)
+    elif len(client_sentiment) < 5:
+        user_recommendation_list = lazy_recommender(client_id, client_frame, persian_data_frame_clean)
+        user_rec_list = user_recommendation_list['Perfume Name'].reset_index(drop=True)
+        
+        make_progress_bar.progress(70, text='Making Scents from the Notes You Like...')
+        client_top, client_mid, client_base = user_vec_prep(client_perfume, client_sentiment, perf_names, vec_top, vec_mid, vec_base)
+        temperature = np.array((1, 2, 1, 1.5), dtype=float)
+        note_recommendation_list = recommender_notes(perf_names, vec_top, vec_mid, vec_base, client_perfume, client_top, client_mid, client_base, temperature)
+        note_rec_list = note_recommendation_list['Perfume'].reset_index(drop=True)
+        df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1)
+    else:
+        user_recommendation_list = recommender_users(client_id, client_frame, persian_data_frame_clean)
+        user_rec_list = user_recommendation_list['Perfume Name'].reset_index(drop=True)
+        
+        make_progress_bar.progress(70, text='Making Scents from the Notes You Like...')
+        client_top, client_mid, client_base = user_vec_prep(client_perfume, client_sentiment, perf_names, vec_top, vec_mid, vec_base)
+        temperature = np.array((1, 2, 1, 1.5), dtype=float)
+        note_recommendation_list = recommender_notes(perf_names, vec_top, vec_mid, vec_base, client_perfume, client_top, client_mid, client_base, temperature)
+        note_rec_list = note_recommendation_list['Perfume'].reset_index(drop=True)
+        df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1)
     
-    user_rec_list = user_recommendation_list['Perfume Name'].reset_index(drop=True)
-    note_rec_list = note_recommendation_list['Perfume'].reset_index(drop=True)
     make_progress_bar.progress(100, text='We Made Some Scents for You')
     # df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1)
 
     n_recs = 20
+    dict_slider = {'Extremely Thinking (T)': 0., 'Thinking (T)': 0.2, 'Just A Little T': 0.4, 
+                'Neutral': 0.5, 
+                'Just A Little F': 0.6, 'Feeling (F)': 0.8, 'Extremely Feeling (F)': 1.}
     slider = pd.Series((tf_slider)).replace(dict_slider)
 
     recommendation_list = combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider)
