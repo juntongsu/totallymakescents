@@ -19,3 +19,5 @@ persian_data_frame_clean = df_persian_new.loc[(df_persian_new['User ID'].isin(se
 persian_data_frame_clean.update(persian_data_frame_clean["Sentiment"].apply(enum_ratings))
 
 persian_data_frame_clean.to_csv('{}cleaned_persian.csv'.format(path_data))
+
+df_persian_new.value_counts('Perfume Name').head(20).to_csv('{}newbie_persian.csv'.format(path_data))
