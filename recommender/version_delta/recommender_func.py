@@ -242,6 +242,6 @@ def combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider):
 ################################################# combine_rec_lists_func
 
 
-def recommender_newbie():
+def recommender_newbie(path_data):
     df_rec_list = pd.read_csv('{}newbie_persian.csv'.format(path_data))
     return df_rec_list[['Perfume Name']]
