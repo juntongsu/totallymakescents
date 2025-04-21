@@ -45,13 +45,13 @@ client_perfume_1 = input_left_column_1.multiselect(
     key='client_perfume_1')
 client_allergy_switch = input_right_column_1.toggle('You have allergy to one or more of these.')
 if client_allergy_switch:
-    client_sentiemnt_1 = input_right_column_1.multiselect(
+    client_allergy = input_right_column_1.multiselect(
         '',
         client_perfume_1,
         placeholder='Please specify',
-        key='client_sentiemnt_1')
+        key='client_allergy')
 
-EI_slider = st.select_slider(
+ei_slider = st.select_slider(
     'Your MBTI',
     options = [
         'Extremely Extraverted (E)',
@@ -63,7 +63,7 @@ EI_slider = st.select_slider(
         'Extremely Introverted (I)'],
     value = ('Neutral'),
     key='ei_slider',
-    help='Popularity slider. Placeholder slider. The real note-user slider. Placeholder slider.'
+    help='Reorder.'
 )
 
 ns_slider = st.select_slider(
@@ -124,6 +124,12 @@ vec_top = pd.read_csv('{}cleaned_vec_top_{}.csv'.format(path_data, language))
 vec_mid = pd.read_csv('{}cleaned_vec_mid_{}.csv'.format(path_data, language))
 vec_base = pd.read_csv('{}cleaned_vec_base_{}.csv'.format(path_data, language))
 
+dict_slider = {'Extremely Thinking (T)': 0., 'Thinking (T)': 0.2, 'Just A Little T': 0.4, 
+            'Neutral': 0.5, 
+            'Just A Little F': 0.6, 'Feeling (F)': 0.8, 'Extremely Feeling (F)': 1.}
+
+n_recs = 20
+
 if make_button:
     make_progress_bar = st.progress(0, text='Making Scents...')
     client_perfume = pd.Series((client_perfume_0 + client_perfume_1), dtype='string', name='Perfume Name')
@@ -134,7 +140,15 @@ if make_button:
     make_progress_bar.progress(30, text='Making Scents from Users Like You...')
 
     if len(client_sentiment) == 0:
-        df_rec_list = recommender_newbie(path_data)
+        recommendation_list = recommender_newbie(path_data)
+        recommendation_list
+    elif len(client_perfume_0) == 0:
+        make_progress_bar.progress(70, text='Making Scents from the Notes You Like...')
+        client_top, client_mid, client_base = user_vec_prep(client_perfume, client_sentiment, perf_names, vec_top, vec_mid, vec_base)
+        temperature = np.array((1, 2, 1, 1.5), dtype=float)
+        note_recommendation_list = recommender_notes(perf_names, vec_top, vec_mid, vec_base, client_perfume, client_top, client_mid, client_base, temperature)
+        recommendation_list = note_recommendation_list['Perfume'].reset_index(drop=True)
+        recommendation_list
     elif len(client_sentiment) < 5:
         user_recommendation_list = lazy_recommender(client_id, client_frame, persian_data_frame_clean)
         user_rec_list = user_recommendation_list['Perfume Name'].reset_index(drop=True)
@@ -145,6 +159,10 @@ if make_button:
         note_recommendation_list = recommender_notes(perf_names, vec_top, vec_mid, vec_base, client_perfume, client_top, client_mid, client_base, temperature)
         note_rec_list = note_recommendation_list['Perfume'].reset_index(drop=True)
         df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1)
+
+        slider = pd.Series((tf_slider)).replace(dict_slider).values
+        recommendation_list = combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider)
+        recommendation_list
     else:
         user_recommendation_list = recommender_users(client_id, client_frame, persian_data_frame_clean)
         user_rec_list = user_recommendation_list['Perfume Name'].reset_index(drop=True)
@@ -155,18 +173,12 @@ if make_button:
         note_recommendation_list = recommender_notes(perf_names, vec_top, vec_mid, vec_base, client_perfume, client_top, client_mid, client_base, temperature)
         note_rec_list = note_recommendation_list['Perfume'].reset_index(drop=True)
         df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1)
+
+        slider = pd.Series((tf_slider)).replace(dict_slider).values
+        recommendation_list = combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider)
+        recommendation_list
     
     make_progress_bar.progress(100, text='We Made Some Scents for You')
-    # df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1)
-
-    n_recs = 20
-    dict_slider = {'Extremely Thinking (T)': 0., 'Thinking (T)': 0.2, 'Just A Little T': 0.4, 
-                'Neutral': 0.5, 
-                'Just A Little F': 0.6, 'Feeling (F)': 0.8, 'Extremely Feeling (F)': 1.}
-    slider = pd.Series((tf_slider)).replace(dict_slider)
-
-    recommendation_list = combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider)
-    recommendation_list
 
     time.sleep(1)
     make_progress_bar.empty()
