@@ -34,7 +34,7 @@ The initial embeddings for content-based filtering were created by one-hot encod
 
 ## Models
 
-We decided to use a combination of three models: A user based model (aka collaborative filtering) that recommended perfumes based on how similar a user’s preferences were to those of other users in our dataset; a content-based model that recommended perfumes with similar notes to perfumes the user enjoyed in the past; and a model that recommended the most popular perfumes among users deemed “relevant” enough. In order to measure similarity between users and similarity between notes, we used cosine similarity, while “relevant” users were simply those who had one liked perfume in common with the target user. Each model takes in a list of liked and disliked perfumes and outputs a recommendation list. 
+We decided to use a hybrid of three models: A user based model (aka collaborative filtering) that recommended perfumes based on how similar a user’s preferences were to those of other users in our dataset; a content-based model that recommended perfumes with similar notes to perfumes the user enjoyed in the past; and a model that recommended the most popular perfumes among users deemed “relevant” enough. In order to measure similarity between users and similarity between notes, we used cosine similarity, while “relevant” users were simply those who had one liked perfume in common with the target user. Each model takes in a list of liked and disliked perfumes and outputs a recommendation list. 
 
 During testing we observed that, for users on whom we had information on fewer than twenty total likes and dislikes, the popularity model best predicted their preferences. However, the other two models had greater improvements in performance than the popularity model when we had more user data. It should be noted that the user based model inherently has a popularity bias, while the content-based model does not. As one goal for our recommender is to help users discover perfumes they may have otherwise overlooked, our final model pulls from all three of the aforementioned models.
 
@@ -62,7 +62,10 @@ In the hit test folder, you’ll find graphs illustrating the performance of sev
 * The user-based and content-based models both significantly outperform random guessing.
 It’s expected that the content-based model underperforms relative to the user-based model in this test. This is partly due to the test favoring popular items and also because the evaluation is based on user preference data, which doesn’t perfectly align with the notes data used in the content-based model.
 
-In the sentiment folder, you'll find graphs from the second evaluation test.
+In the sentiment folder, you'll find graphs from the second evaluation test. There you will find graphs illustrating the following models:
+* User-based model
+* Content-based model (labled "notes")
+* Popularity model
 ### Key observations:
 
 * For both the user-based and content-based models, performance increases as the number of perfumes evaluated per user increases.
