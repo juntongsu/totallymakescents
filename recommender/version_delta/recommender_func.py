@@ -263,3 +263,22 @@ def combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider):
 def recommender_newbie(path_data):
     df_rec_list = pd.read_csv('{}newbie_persian.csv'.format(path_data))
     return df_rec_list[['Perfume Name']]
+
+
+################################################# allergy_finder_func
+
+
+def names_to_notes(df_fra_standard, client_allergy):
+    client_allergy_top = df_fra_standard[df_fra_standard['Perfume'].isin(client_allergy)]['Top'].convert_dtypes()
+    client_allergy_mid = df_fra_standard[df_fra_standard['Perfume'].isin(client_allergy)]['Middle'].convert_dtypes()
+    client_allergy_base = df_fra_standard[df_fra_standard['Perfume'].isin(client_allergy)]['Base'].convert_dtypes()
+    client_allergy_note = pd.Series(pd.concat([client_allergy_top, client_allergy_mid, client_allergy_base]).str.cat(sep=', ').split(', '), dtype='string').drop_duplicates()
+    return client_allergy_note
+
+def client_allergy_finder(client_allergy, recommendation_list, df_fra_standard):
+    client_allergy_note = names_to_notes(df_fra_standard, client_allergy)
+    rec_list_allergy_bool = []
+    for rec_list_name in recommendation_list:
+        rec_list_note = names_to_notes(df_fra_standard, recommendation_list)
+        rec_list_allergy_bool.append(rec_list_note.isin(client_allergy_note).any())
+    return pd.Series(rec_list_allergy_bool, dtype='bool', name='Allergy Risk')
