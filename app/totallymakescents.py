@@ -177,7 +177,8 @@ if make_button:
     if client_allergy_switch and (len(client_allergy) > 0):
         make_progress_bar.progress(90, text='Checking Allergy...')
         df_fra_standard = pd.read_csv('{}fra_standard.csv'.format(path_data))
-        rec_list_allergy_bool = client_allergy_finder(client_perfume, client_allergy, recommendation_list, df_fra_standard)
+        client_allergy = pd.Series(client_allergy, dtype='string')
+        client_allergy_note, rec_list_note, rec_list_allergy_bool = client_allergy_finder(client_perfume, client_allergy, recommendation_list, df_fra_standard)
     else:
         rec_list_allergy_bool = pd.Series(np.zeros(len(recommendation_list), dtype='bool'), name='Allergy Risk')
     
