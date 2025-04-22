@@ -268,15 +268,21 @@ def recommender_newbie(path_data):
 ################################################# allergy_finder_func
 
 
-def names_to_notes(df_fra_standard, client_allergy):
-    client_allergy_top = df_fra_standard[df_fra_standard['Perfume'].isin(client_allergy)]['Top'].convert_dtypes()
-    client_allergy_mid = df_fra_standard[df_fra_standard['Perfume'].isin(client_allergy)]['Middle'].convert_dtypes()
-    client_allergy_base = df_fra_standard[df_fra_standard['Perfume'].isin(client_allergy)]['Base'].convert_dtypes()
-    client_allergy_note = pd.Series(pd.concat([client_allergy_top, client_allergy_mid, client_allergy_base]).str.cat(sep=', ').split(', '), dtype='string').drop_duplicates()
-    return client_allergy_note
+def names_to_notes(df_fra_standard, this_client_name):
+    this_client_top = df_fra_standard[df_fra_standard['Perfume'].isin([this_client_name])]['Top'].convert_dtypes()
+    this_client_mid = df_fra_standard[df_fra_standard['Perfume'].isin([this_client_name])]['Middle'].convert_dtypes()
+    this_client_base = df_fra_standard[df_fra_standard['Perfume'].isin([this_client_name])]['Base'].convert_dtypes()
+    this_client_note = pd.Series(pd.concat([this_client_top, this_client_mid, this_client_base]).str.cat(sep=', ').split(', '), dtype='string').drop_duplicates()
+    return this_client_note
 
 def client_allergy_finder(client_perfume, client_allergy, recommendation_list, df_fra_standard):
-    client_allergy_note = names_to_notes(df_fra_standard, client_allergy)
+    for i in range(len(client_allergy)):
+        client_allergy_name = client_allergy[i]
+        if i == 0:
+            client_allergy_note = names_to_notes(df_fra_standard, client_allergy_name)
+        else:
+            client_warn_note = names_to_notes(df_fra_standard, client_allergy_name)
+            client_allergy_note = pd.Series(list(set(client_warn_note) & set(client_allergy_note)))
 
     client_perfume_2 = client_perfume[~client_perfume.isin(client_allergy)]
     client_safe_note = names_to_notes(df_fra_standard, client_perfume_2)
@@ -284,6 +290,8 @@ def client_allergy_finder(client_perfume, client_allergy, recommendation_list, d
     
     rec_list_allergy_bool = []
     for rec_list_name in recommendation_list:
-        rec_list_note = names_to_notes(df_fra_standard, recommendation_list)
+        rec_list_note = names_to_notes(df_fra_standard, rec_list_name)
         rec_list_allergy_bool.append(rec_list_note.isin(client_allergy_note).any())
-    return pd.Series(rec_list_allergy_bool, dtype='bool', name='Allergy Risk')
+    rec_list_allergy_bool = pd.Series(rec_list_allergy_bool, dtype='bool', name='Allergy Risk')
+    
+    return client_allergy_note, rec_list_note, rec_list_allergy_bool
