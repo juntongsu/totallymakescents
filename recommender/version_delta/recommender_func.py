@@ -275,8 +275,13 @@ def names_to_notes(df_fra_standard, client_allergy):
     client_allergy_note = pd.Series(pd.concat([client_allergy_top, client_allergy_mid, client_allergy_base]).str.cat(sep=', ').split(', '), dtype='string').drop_duplicates()
     return client_allergy_note
 
-def client_allergy_finder(client_allergy, recommendation_list, df_fra_standard):
+def client_allergy_finder(client_perfume, client_allergy, recommendation_list, df_fra_standard):
     client_allergy_note = names_to_notes(df_fra_standard, client_allergy)
+
+    client_perfume_2 = client_perfume[~client_perfume.isin(client_allergy)]
+    client_safe_note = names_to_notes(df_fra_standard, client_perfume_2)
+    client_allergy_note = pd.concat([client_safe_note, client_safe_note, client_allergy_note]).drop_duplicates(keep=False)
+    
     rec_list_allergy_bool = []
     for rec_list_name in recommendation_list:
         rec_list_note = names_to_notes(df_fra_standard, recommendation_list)
