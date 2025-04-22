@@ -66,6 +66,7 @@ In the sentiment folder, you'll find graphs from the second evaluation test. The
 * User-based model
 * Content-based model (labled "notes")
 * Popularity model
+* Randomly generated ratings
 ### Key observations:
 
 * For both the user-based and content-based models, performance increases as the number of perfumes evaluated per user increases.
