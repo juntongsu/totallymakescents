@@ -39,7 +39,7 @@ client_perfume_0 = st.multiselect(
 input_left_column_1, input_right_column_1 = st.columns(2)
 client_perfume_1 = input_left_column_1.multiselect(
     'You avoid these perfumes',
-    perf_names,
+    perf_names[~perf_names.isin(client_perfume_0)],
     placeholder='Type to search in the library',
     help='Allergy help',
     key='client_perfume_1')
@@ -174,9 +174,13 @@ if make_button:
         slider = pd.Series((tf_slider)).replace(dict_slider).values
         recommendation_list = combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider)
     
-    if len(client_allergy) > 0:
+    if client_allergy_switch and (len(client_allergy) > 0):
+        make_progress_bar.progress(90, text='Checking Allergy...')
         df_fra_standard = pd.read_csv('{}fra_standard.csv'.format(path_data))
-        rec_list_allergy_bool = client_allergy_finder(client_allergy, recommendation_list, df_fra_standard)
+        rec_list_allergy_bool = client_allergy_finder(client_perfume, client_allergy, recommendation_list, df_fra_standard)
+    else:
+        rec_list_allergy_bool = pd.Series(np.zeros(len(recommendation_list), dtype='bool'), name='Allergy Risk')
+    
     
     output = pd.concat([recommendation_list, rec_list_allergy_bool], axis=1)
     output
