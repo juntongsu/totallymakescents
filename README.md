@@ -60,6 +60,7 @@ In the hit test folder, you’ll find graphs illustrating the performance of sev
 * The user-based model performs similarly to the popularity-based model. While the popularity model achieved slightly more total hits overall, the user-based model outperformed it by over 10% when focusing on users with at least twenty perfumes in their evaluation set.
 * Both of these models outperform the top twenty recommendation list, which simply recommends the most popular perfumes across the board.
 * The user-based and content-based models both significantly outperform random guessing.
+
 It’s expected that the content-based model underperforms relative to the user-based model in this test. This is partly due to the test favoring popular items and also because the evaluation is based on user preference data, which doesn’t perfectly align with the notes data used in the content-based model.
 
 In the sentiment folder, you'll find graphs from the second evaluation test. There you will find graphs illustrating the following models:
