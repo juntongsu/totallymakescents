@@ -29,6 +29,7 @@ with st.sidebar:
         st.link_button('Su', 'https://juntongsu.github.io/#')
         st.link_button('Elly', 'https://github.com/ellydo17')
         st.link_button('Katherine', 'https://github.com/kmerkl22')
+        st.link_button('Fernando', 'https://github.com/fernando-liu-lopez')
     
     with st.expander('Help'):
         st.link_button('README', '{}README.md'.format(path_total))
