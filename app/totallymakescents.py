@@ -18,11 +18,23 @@ from recommender.version_delta.recommender_func import *
 # user_frame.columns = ["Perfume Name", "Sentiment"]
 
 st.title('TotallyMakeScents')
-st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your stroy, and we MAKESCENTS.")
+st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
 
 language = 0
 df_perf_names = pd.read_csv('{}cleaned_perf_names_{}.csv'.format(path_data, language))
 perf_names = df_perf_names['Perfume']
+
+with st.sidebar:
+    with st.expander('Meet the Team'):
+        st.link_button('Su', 'https://juntongsu.github.io/#')
+        st.link_button('Elly', 'https://github.com/ellydo17')
+        st.link_button('Katherine', 'https://github.com/kmerkl22')
+        st.link_button('Fernando', 'https://github.com/fernando-liu-lopez')
+    
+    with st.expander('Help'):
+        st.link_button('README', '{}README.md'.format(path_total))
+        st.link_button('Project Github', 'https://github.com/juntongsu/totallymakescents')
+        st.link_button('I Need REAL Help!', '')
 
 # input_left_column_0, input_right_column_0 = st.columns(2)
 client_perfume_0 = st.multiselect(
@@ -179,11 +191,10 @@ if make_button:
         df_fra_standard = pd.read_csv('{}fra_standard.csv'.format(path_data))
         client_allergy = pd.Series(client_allergy, dtype='string')
         client_allergy_note, rec_list_note, rec_list_allergy_bool = client_allergy_finder(client_perfume, client_allergy, recommendation_list, df_fra_standard)
+        output = pd.concat([recommendation_list, rec_list_allergy_bool], axis=1)
     else:
-        rec_list_allergy_bool = pd.Series(np.zeros(len(recommendation_list), dtype='bool'), name='Allergy Risk')
+        output = recommendation_list
     
-    
-    output = pd.concat([recommendation_list, rec_list_allergy_bool], axis=1)
     output
     make_progress_bar.progress(100, text='We Made Some Scents for You')
 

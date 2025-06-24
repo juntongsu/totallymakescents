@@ -283,15 +283,18 @@ def client_allergy_finder(client_perfume, client_allergy, recommendation_list, d
         else:
             client_warn_note = names_to_notes(df_fra_standard, client_allergy_name)
             client_allergy_note = pd.Series(list(set(client_warn_note) & set(client_allergy_note)))
-
-    client_perfume_2 = client_perfume[~client_perfume.isin(client_allergy)]
-    client_safe_note = names_to_notes(df_fra_standard, client_perfume_2)
-    client_allergy_note = pd.concat([client_safe_note, client_safe_note, client_allergy_note]).drop_duplicates(keep=False)
     
-    rec_list_allergy_bool = []
-    for rec_list_name in recommendation_list:
-        rec_list_note = names_to_notes(df_fra_standard, rec_list_name)
-        rec_list_allergy_bool.append(rec_list_note.isin(client_allergy_note).any())
-    rec_list_allergy_bool = pd.Series(rec_list_allergy_bool, dtype='bool', name='Allergy Risk')
+    if len(client_allergy_note) == 0:
+        rec_list_allergy_bool = pd.Series(np.ones(len(recommendation_list)), dtype='bool', name='Allergy Risk')
+    else:
+        client_perfume_2 = client_perfume[~client_perfume.isin(client_allergy)]
+        client_safe_note = names_to_notes(df_fra_standard, client_perfume_2)
+        client_allergy_note = pd.concat([client_safe_note, client_safe_note, client_allergy_note]).drop_duplicates(keep=False)
+        
+        rec_list_allergy_bool = []
+        for rec_list_name in recommendation_list:
+            rec_list_note = names_to_notes(df_fra_standard, rec_list_name)
+            rec_list_allergy_bool.append(rec_list_note.isin(client_allergy_note).any())
+        rec_list_allergy_bool = pd.Series(rec_list_allergy_bool, dtype='bool', name='Allergy Risk')
     
     return client_allergy_note, rec_list_note, rec_list_allergy_bool
