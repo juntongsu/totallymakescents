@@ -2,7 +2,7 @@ import streamlit as st
 
 pages = {
     'Find Scents': [
-        st.Page('totallymakescents.py', title = 'TotallyMakeScents', icon = ':material/search:'),
+        st.Page('pages/tms1.py', title = 'TotallyMakeScents', icon = ':material/search:'),
         st.Page('pages/tms_newbee.py', title = 'Totally New'),
         st.Page('pages/tms_potd.py', title = 'POTD'),
     ],

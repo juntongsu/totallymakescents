@@ -4,7 +4,7 @@ import numpy as np
 import sys 
 import pathlib
 import time
-sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
+sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 # path_total = '../'
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
@@ -20,7 +20,7 @@ df_fra_standard = pd.read_csv('{}fra_standard.csv'.format(path_data))
 
 potd = df_fra_standard.sample(1)
 
-potd
+# potd
 
 st.subheader('{}'.format(potd['Perfume'].values))
 st.text('Brand: {}'.format(potd['Brand'].values))
