@@ -1,32 +1,16 @@
-import streamlit as st 
-import pandas as pd
-import numpy as np
+import streamlit as st
 
-import requests
-import pathlib
-import sys
-import time
+pages = {
+    'Find Scents': [
+        st.Page('totallymakescents.py', title = 'TotallyMakeScents', icon = ':material/search:'),
+        st.Page('pages/tms_newbee.py', title = 'Totally New'),
+        st.Page('pages/tms_potd.py', title = 'POTD'),
+    ],
+    'About': [
+        st.Page('pages/about_us.py', title = 'Meet the Team'),
+        st.Page('pages/help.py', title = 'Help'),
+    ]
+}
 
-
-# To add a page, add it here following the format below.
-# Finally, add the page to the st.navigation list at the end.
-
-# Home page (recommender)
-home_page = st.Page(
-    'tms2.py',                  #filename that creates this page
-    title = 'Find Scents',      # page title
-    icon = ':material/search:'  # emoji icons 
-)
-
-# About us page
-about_us = st.Page(
-    'pages/about_us.py',
-    title = 'About Us'
-)
-
-
-
-#---------------------------------------------------------
-# List all pages on the list below
-pg = st.navigation([home_page, about_us])
+pg = st.navigation(pages, position='top')
 pg.run()

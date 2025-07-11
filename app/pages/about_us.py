@@ -1,11 +1,4 @@
-import app.tms2 as st 
-import pandas as pd
-import numpy as np
-
-import requests
-import pathlib
-import sys
-import time
+import streamlit as st 
 
 img_path = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/app/images/'
 
@@ -31,6 +24,6 @@ txt3.write('I enjoy reading and painting.')
 
 st.subheader('Su')
 img4,txt4 = st.columns(2)
-img4.image(img_path+'su.png')
+img4.image(img_path+'su.jpg')
 txt4.write('(https://juntongsu.github.io/#)')
 txt4.write('Panda, an animal, eats shoots and leaves')

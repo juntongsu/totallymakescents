@@ -24,17 +24,17 @@ language = 0
 df_perf_names = pd.read_csv('{}cleaned_perf_names_{}.csv'.format(path_data, language))
 perf_names = df_perf_names['Perfume']
 
-with st.sidebar:
-    with st.expander('Meet the Team'):
-        st.link_button('Su', 'https://juntongsu.github.io/#')
-        st.link_button('Elly', 'https://github.com/ellydo17')
-        st.link_button('Katherine', 'https://github.com/kmerkl22')
-        st.link_button('Fernando', 'https://github.com/fernando-liu-lopez')
+# with st.sidebar:
+#     with st.expander('Meet the Team'):
+#         st.link_button('Su', 'https://juntongsu.github.io/#')
+#         st.link_button('Elly', 'https://github.com/ellydo17')
+#         st.link_button('Katherine', 'https://github.com/kmerkl22')
+#         st.link_button('Fernando', 'https://github.com/fernando-liu-lopez')
     
-    with st.expander('Help'):
-        st.link_button('README', '{}README.md'.format(path_total))
-        st.link_button('Project Github', 'https://github.com/juntongsu/totallymakescents')
-        st.link_button('I Need REAL Help!', '')
+#     with st.expander('Help'):
+#         st.link_button('README', '{}README.md'.format(path_total))
+#         st.link_button('Project Github', 'https://github.com/juntongsu/totallymakescents')
+#         st.link_button('I Need REAL Help!', '')
 
 # input_left_column_0, input_right_column_0 = st.columns(2)
 client_perfume_0 = st.multiselect(
