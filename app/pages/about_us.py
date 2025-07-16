@@ -14,11 +14,17 @@ with search1:
     with st.expander("Elly's Favorite Search"):
         st.link_button('A magical scent :crystal_ball: in a mystical forest :evergreen_tree: with herbs :herb: and secrets:no_mouth:.', '')
 
-img2, txt2 = st.columns([1, 2])
+img2, txt2, search2 = st.columns(3)
 img2.image(img_path+'fernando.jpg')
 txt2.subheader('Fernando')
 txt2.markdown("[![Repo](https://badgen.net/badge/github/Github/green?icon&label)](https://github.com/fernando-liu-lopez)", unsafe_allow_html=True)
 txt2.write('[fill]')
+with search2:
+    with st.expander("Fernando's Favorite Search"):
+        st.link_button('A floral scent :blossom: with hints of jasmine :bouquet:.', '')
+        st.link_button('A woody fragrance :deciduous_tree: with notes of cedar :evergreen_tree:.', '')
+        st.link_button('A citrusy aroma :lemon: with a touch of bergamot :tangerine:.', '')
+
 
 img5, txt5 = st.columns([1, 2])
 img5.image(img_path+'su.png')
@@ -35,7 +41,8 @@ txt3.write('I enjoy reading and painting.')
 img4, txt4, search4 = st.columns(3)
 img4.image(img_path+'su.jpg')
 txt4.subheader('Su')
-txt4.markdown("[![Repo](https://badgen.net/badge/github/Github/pink?icon&label)](https://github.com/juntongsu)", unsafe_allow_html=True)
+txt4.markdown("[![Repo](https://badgen.net/badge/github/Github/pink?icon&label)](https://github.com/juntongsu)", unsafe_allow_html=True) 
+txt4.markdown("[![Repo](https://badgen.net/badge/personal/website/pink)](https://juntongsu.github.io)", unsafe_allow_html=True)
 txt4.write('Panda, an animal, eats shoots and leaves.')
 with search4:
     with st.expander("Su's Favorite Search"):
