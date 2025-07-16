@@ -12,7 +12,7 @@ txt1.markdown("[![Repo](https://badgen.net/badge/github/Github/purple?icon&label
 txt1.write('I like to travel!')
 with search1:
     with st.expander("Elly's Favorite Search"):
-        st.link_button('A magical scent :magic_wand: in a mystical forest :evergreen_tree: with herbs :herb: and secrets:crystal_ball:.', '')
+        st.link_button('A magical scent :crystal_ball: in a mystical forest :evergreen_tree: with herbs :herb: and secrets:no_mouth:.', '')
 
 img2, txt2 = st.columns([1, 2])
 img2.image(img_path+'fernando.jpg')
