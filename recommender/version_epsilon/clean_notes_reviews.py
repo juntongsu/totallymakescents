@@ -3,7 +3,7 @@
 ###
 
 import pandas as pd
-home = '../'
+home = '../../'
 path_data = home + 'data/'
 
 df_fra_standard = pd.read_csv(path_data + 'fra_standard.csv')

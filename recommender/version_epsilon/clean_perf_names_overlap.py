@@ -2,7 +2,7 @@
 # find overlap perfumes between fra_reviews_merged.parquet and cleaned_persian.csv
 ###
 import pandas as pd
-home = '../'
+home = '../../'
 path_data = home + 'data/'
 
 def find_overlap(df_persian, df_data_notes):

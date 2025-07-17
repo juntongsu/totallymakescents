@@ -81,7 +81,7 @@ st.subheader('Perfume Recommender v1')
 from recommender.version_delta.recommender_func import *
 
 # Load perfumes names csv
-perfume_names = pd.read_csv('{}cleaned_perf_names_0.csv'.format(path+'data/'))
+perfume_names = pd.read_csv('{}cleaned_perf_names_0.csv'.format(path+'data/archive/'))
 perfume_names = perfume_names['Perfume']
 
 # Change multiselect tag color to gray
