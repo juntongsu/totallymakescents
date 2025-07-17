@@ -3,6 +3,7 @@ import streamlit as st
 pages = {
     'Find Scents': [
         st.Page('pages/tms1.py', title = 'TotallyMakeScents', icon = ':material/search:'),
+        # st.Page('pages/home.py', title = 'TMS Pro Max', icon = ':material/travel_explore:'),
         st.Page('pages/tms_newbee.py', title = 'Totally New', icon = ':material/psychology_alt:'),
         st.Page('pages/tms_potd.py', title = 'POTD', icon = ':material/calendar_today:'),
     ],

@@ -20,21 +20,8 @@ from recommender.version_delta.recommender_func import *
 st.title('TotallyMakeScents')
 st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
 
-language = 0
-df_perf_names = pd.read_csv('{}cleaned_perf_names_{}.csv'.format(path_data, language))
+df_perf_names = pd.read_parquet('{}perf_names.parquet'.format(path_data))
 perf_names = df_perf_names['Perfume']
-
-# with st.sidebar:
-#     with st.expander('Meet the Team'):
-#         st.link_button('Su', 'https://juntongsu.github.io/#')
-#         st.link_button('Elly', 'https://github.com/ellydo17')
-#         st.link_button('Katherine', 'https://github.com/kmerkl22')
-#         st.link_button('Fernando', 'https://github.com/fernando-liu-lopez')
-    
-#     with st.expander('Help'):
-#         st.link_button('README', '{}README.md'.format(path_total))
-#         st.link_button('Project Github', 'https://github.com/juntongsu/totallymakescents')
-#         st.link_button('I Need REAL Help!', '')
 
 # input_left_column_0, input_right_column_0 = st.columns(2)
 client_perfume_0 = st.multiselect(
@@ -132,9 +119,9 @@ make_button = button_mid_column.button(
     type='primary')
 
 persian_data_frame_clean = pd.read_csv('{}cleaned_persian.csv'.format(path_data))
-vec_top = pd.read_csv('{}cleaned_vec_top_{}.csv'.format(path_data, language))
-vec_mid = pd.read_csv('{}cleaned_vec_mid_{}.csv'.format(path_data, language))
-vec_base = pd.read_csv('{}cleaned_vec_base_{}.csv'.format(path_data, language))
+vec_top = pd.read_parquet('{}vec_top.parquet'.format(path_data))
+vec_mid = pd.read_parquet('{}vec_mid.parquet'.format(path_data))
+vec_base = pd.read_parquet('{}vec_base.parquet'.format(path_data))
 
 dict_slider = {'Extremely Thinking (T)': 0., 'Thinking (T)': 0.2, 'Just A Little T': 0.4, 
             'Neutral': 0.5, 
@@ -160,7 +147,8 @@ if make_button:
         note_recommendation_list = recommender_notes(perf_names, vec_top, vec_mid, vec_base, client_perfume, client_top, client_mid, client_base, temperature)
         recommendation_list = note_recommendation_list['Perfume'].reset_index(drop=True)
     elif len(client_sentiment) < 5:
-        user_recommendation_list = lazy_recommender(client_id, client_frame, persian_data_frame_clean)
+        # user_recommendation_list = lazy_recommender(client_id, client_frame, persian_data_frame_clean)
+        user_recommendation_list = recommender_newbie(path_data)
         user_rec_list = user_recommendation_list['Perfume Name'].reset_index(drop=True)
         
         make_progress_bar.progress(70, text='Making Scents from the Notes You Like...')
@@ -173,7 +161,8 @@ if make_button:
         slider = pd.Series((tf_slider)).replace(dict_slider).values
         recommendation_list = combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider)
     else:
-        user_recommendation_list = recommender_users(client_id, client_frame, persian_data_frame_clean)
+        # user_recommendation_list = recommender_users(client_id, client_frame, persian_data_frame_clean)
+        user_recommendation_list = recommender_newbie(path_data)
         user_rec_list = user_recommendation_list['Perfume Name'].reset_index(drop=True)
         
         make_progress_bar.progress(70, text='Making Scents from the Notes You Like...')

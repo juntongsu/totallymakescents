@@ -194,6 +194,6 @@ else:
 # Sidebar - Credits / About Us
 # -------------------------------------------------------------------------
 
-with st.sidebar.expander('About this app'):
-    st.write('This app does [blank] and was made by [blank].')
-    st.write('Contributors:\n- Elly \n- Fernando\n- Katherine \n- Su')
+# with st.sidebar.expander('About this app'):
+#     st.write('This app does [blank] and was made by [blank].')
+#     st.write('Contributors:\n- Elly \n- Fernando\n- Katherine \n- Su')
