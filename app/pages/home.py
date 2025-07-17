@@ -3,16 +3,16 @@
 # -------------------------------------------------------------------------
 import streamlit as st 
 import pandas as pd
-import numpy as np
+# import numpy as np
 
-import requests
+# import requests
 import pathlib
 import sys
-import time
+# import time
 
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 
-sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
+sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 
 # -------------------------------------------------------------------------
 # Set up 
@@ -81,7 +81,7 @@ st.subheader('Perfume Recommender v1')
 from recommender.version_delta.recommender_func import *
 
 # Load perfumes names csv
-perfume_names = pd.read_csv('{}cleaned_perf_names_0.csv'.format(path+'data/archive/'))
+perfume_names = pd.read_csv('{}archive/cleaned_perf_names_0.csv'.format(path+'data/'))
 perfume_names = perfume_names['Perfume']
 
 # Change multiselect tag color to gray
