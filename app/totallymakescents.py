@@ -5,6 +5,8 @@ pages = {
         st.Page('pages/tms1.py', title = 'TotallyMakeScents Lite', icon = ':material/search:'),
         st.Page('pages/tms_pro.py', title = 'TotallyMakeScents Pro', icon = ':material/database_search:'),
         st.Page('pages/home.py', title = 'TotallyMakeScents Max', icon = ':material/travel_explore:'),
+    ],
+    'Explore': [
         st.Page('pages/tms_newbee.py', title = 'Totally New', icon = ':material/psychology_alt:'),
         st.Page('pages/tms_potd.py', title = 'POTD', icon = ':material/calendar_today:'),
     ],

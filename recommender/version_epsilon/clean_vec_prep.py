@@ -19,11 +19,9 @@ def notes_accords_vec_prep(df_data_notes):
 
 df_features_reviews_merge = pd.read_parquet(path_data + 'fra_reviews_merged.parquet')
 perf_names, vec_top, vec_mid, vec_base, vec_accords = notes_accords_vec_prep(df_features_reviews_merge)
-perf_urls = df_features_reviews_merge['url'].convert_dtypes().str.replace('https://www.fragrantica.com/perfume/', '').str.replace('.html', '').str.rpartition('-')[0]
 
 pd.DataFrame(perf_names).to_parquet('{}perf_names.parquet'.format(path_data))
 pd.DataFrame(vec_top).to_parquet('{}vec_top.parquet'.format(path_data))
 pd.DataFrame(vec_mid).to_parquet('{}vec_mid.parquet'.format(path_data))
 pd.DataFrame(vec_base).to_parquet('{}vec_base.parquet'.format(path_data))
 pd.DataFrame(vec_accords).to_parquet('{}vec_accords.parquet'.format(path_data))
-pd.DataFrame(perf_urls).to_parquet('{}perf_urls.parquet'.format(path_data))

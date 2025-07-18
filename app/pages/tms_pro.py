@@ -4,8 +4,13 @@ import numpy as np
 import sys 
 import pathlib
 import time
+from pandas.api.types import (
+    is_categorical_dtype,
+    is_numeric_dtype,
+)
+
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
-# path_total = '../../'
+# path_total = '../'
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
@@ -20,32 +25,94 @@ from recommender.version_epsilon.recommender_func import *
 st.title('TotallyMakeScents')
 st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
 
-perf_names = pd.read_parquet('{}perf_names.parquet'.format(path_data))
-# perf_urls = pd.read_parquet('{}perf_urls.parquet'.format(path_data))
+df_search = pd.read_parquet('{}search_filter.parquet'.format(path_data))
+df_search = df_search.drop(columns=['url'])
+filter_columns = pd.Series(['Gender', 'Year', 'Country'], dtype='string')
+search_columns = pd.Series(['Perfume', 'Brand', 'Top', 'Middle', 'Base', 'Accords'])
 
-# input_left_column_0, input_right_column_0 = st.columns(2)
+def filter_dataframe(df_search):
+    df_filtered = df_search.copy()
+
+    filtering_container = st.container()
+    with filtering_container:
+        to_filter_columns = st.multiselect('Filter Perfumes on ', filter_columns, key='filter_columns')
+        for column in to_filter_columns:
+            left_col, right_col = st.columns([1, 20])
+            left_col.write(':material/subdirectory_arrow_right:')
+            if is_categorical_dtype(df_filtered[column]) or df_filtered[column].nunique() < 10:
+                user_cat_input = right_col.multiselect(
+                    f"Values for {column}",
+                    df_filtered[column].unique(),
+                    default=list(df_filtered[column].unique()),
+                    key='filter_columns_cat',
+                )
+                df_filtered = df_filtered[df_filtered[column].isin(user_cat_input)]
+            elif is_numeric_dtype(df_filtered[column]):
+                _min = int(df_filtered[column].min())
+                _max = int(df_filtered[column].max())
+                step = 1#(_max - _min) / 100
+                user_num_input = right_col.slider(
+                    f"Values for {column}",
+                    min_value=_min,
+                    max_value=_max,
+                    value=(_min, _max),
+                    step=step,
+                )
+                df_filtered = df_filtered[df_filtered[column].between(*user_num_input)]
+            else:
+                user_text_input = right_col.text_input(
+                    f"Search in {column}",
+                )
+                if user_text_input:
+                    df_filtered = df_filtered[df_filtered[column].astype(str).str.contains(user_text_input, case=False)]
+        
+        search = st.checkbox('Further Search ', key='search')
+        if not search:
+            return df_filtered
+        
+        searching_container = st.container()
+        with searching_container:
+            to_search_columns = st.multiselect('Search Perfumes on ', search_columns, key='search_columns')
+            for column in to_search_columns:
+                left_col, right_col = st.columns([1, 20])
+                left_col.write(':material/subdirectory_arrow_right:')
+                user_text_input = right_col.text_input(
+                    f"Search in {column}",
+                )
+                if user_text_input:
+                    df_filtered = df_filtered[df_filtered[column].astype(str).str.contains(user_text_input, case=False)]
+    return df_filtered
+
 client_perfume_0 = st.multiselect(
-    'You like these perfumes:',
-    perf_names,
+    'Add scents that you enjoy:',
+    df_search['Perfume'],
     placeholder='Type to search in the library',
-    # format_func=,
     help='I like it!',
     key='client_perfume_0')
-# client_sentiemnt_0 = input_right_column_0.selectbox(
-#     '',
-#     sentiment_list,
-#     key='client_sentiemnt_0')
 
-input_left_column_1, input_right_column_1 = st.columns(2)
-client_perfume_1 = input_left_column_1.multiselect(
+filter_0 = st.checkbox('Select with Filters', key='filter_0')
+if filter_0:
+    df_filtered_0 = filter_dataframe(df_search)
+    df_filtered_selection_0 = st.dataframe(df_filtered_0, on_select='rerun', selection_mode='multi-row', hide_index=False)
+    client_perfume_0 = df_filtered_0.iloc[df_filtered_selection_0['selection']['rows']]
+    client_perfume_0 = client_perfume_0['Perfume'].to_list()
+
+client_perfume_1 = st.multiselect(
     'You avoid these perfumes',
-    perf_names[~perf_names.isin(client_perfume_0)],
+    df_search['Perfume'][~df_search['Perfume'].isin(client_perfume_0)],
     placeholder='Type to search in the library',
     help='Allergy help',
     key='client_perfume_1')
-client_allergy_switch = input_right_column_1.toggle('You have allergy to one or more of these.')
+
+# filter_1 = st.checkbox('Select with Filters', key='filter_1')
+# if filter_1:
+#     df_filtered_1 = filter_dataframe(df_search.drop(index=client_perfume_0.index))
+#     df_filtered_selection_1 = st.dataframe(df_filtered_1, on_select='rerun', selection_mode='multi-row', hide_index=False)
+#     client_perfume_1 = df_filtered_1.iloc[df_filtered_selection_1['selection']['rows']]
+
+client_allergy_switch = st.toggle('You have allergy to one or more of these.')
 if client_allergy_switch:
-    client_allergy = input_right_column_1.multiselect(
+    client_allergy = st.multiselect(
         '',
         client_perfume_1,
         placeholder='Please specify',
@@ -120,6 +187,7 @@ make_button = button_mid_column.button(
     type='primary')
 
 persian_data_frame_clean = pd.read_csv('{}cleaned_persian.csv'.format(path_data))
+perf_names = pd.read_parquet('{}perf_names.parquet'.format(path_data))
 vec_top = pd.read_parquet('{}vec_top.parquet'.format(path_data))
 vec_mid = pd.read_parquet('{}vec_mid.parquet'.format(path_data))
 vec_base = pd.read_parquet('{}vec_base.parquet'.format(path_data))
