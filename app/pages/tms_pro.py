@@ -248,7 +248,7 @@ if make_button:
     
     if client_allergy_switch and (len(client_allergy) > 0):
         make_progress_bar.progress(90, text='Checking Allergy...')
-        df_fra_standard = pd.read_csv('{}fra_standard.csv'.format(path_data))
+        df_fra_standard = df_search
         client_allergy = pd.Series(client_allergy, dtype='string')
         client_allergy_note, rec_list_note, rec_list_allergy_bool = client_allergy_finder(client_perfume, client_allergy, recommendation_list, df_fra_standard)
         output = pd.concat([recommendation_list, rec_list_allergy_bool], axis=1)
