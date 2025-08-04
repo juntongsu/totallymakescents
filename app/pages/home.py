@@ -21,7 +21,7 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 # Path to access data files non-locally.
 #       Concatenate with 'app/', 'data/', or 'recommender/'
 #       to access those respective directories
-path = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
+path = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/app'
 
 # -------------------------------------------------------------------------
 # Style (colors, fonts, etc.)
