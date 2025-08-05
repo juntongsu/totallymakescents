@@ -1,5 +1,9 @@
+# Standard libraries
 import streamlit as st
+import pandas as pd
+import numpy as np
 
+# Pages
 pages = {
     'Find Scents': [
         st.Page('pages/tms1.py', title = 'TotallyMakeScents Lite', icon = ':material/search:'),
