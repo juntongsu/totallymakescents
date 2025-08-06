@@ -9,4 +9,12 @@ dependencies:
   - scikit-learn >= 1.4
   - numpy = 1.26.4
   - gcsfs = 2025.7.0
-  - st-files-connection
+  - beautifulsoup4
+  - selenium
+  - selenium-stealth
+  - splinter
+  - webdriver-manager
+  - plotly
+  - pip:
+    - st-files-connection
+    - streamlit-extras
