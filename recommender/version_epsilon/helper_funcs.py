@@ -32,12 +32,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 #from selenium.webdriver.common.keys import Keys 
 #from selenium_stealth import stealth
 
-@st.cache_data
-def installff():
-  os.system('sbase install geckodriver')
-  os.system('ln -s /home/appuser/venv/lib/python3.12/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
+# @st.cache_data
+# def installff():
+#   os.system('sbase install geckodriver')
+#   os.system('ln -s /home/appuser/venv/lib/python3.12/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
 
-_ = installff()
+# _ = installff()
 
 # -------------------------------------------------------------------------
 # Scraping Function
@@ -61,7 +61,7 @@ def scrape_perfume(website):
     profile.set_preference("dom.webdriver.enabled", False)
     #profile.set_preference("useAutomationExtension", False)
     opts.profile = profile
-    service = GeckoService(GeckoDriverManager().install())
+    service = GeckoService(executable_path=GeckoDriverManager().install())
     driver  = webdriver.Firefox(service=service, options=opts)
     #stealth(driver, languages=["en-US", "en"], vendor="Google Inc.", platform="Win32", webgl_vendor="Intel Inc.", renderer="Intel Iris OpenGL Engine", fix_hairline=True,)
     try:
