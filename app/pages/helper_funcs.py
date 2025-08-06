@@ -20,16 +20,17 @@ from pathlib import Path
 
 from bs4 import BeautifulSoup
 from selenium import webdriver            
-from splinter import Browser
+#from splinter import Browser
 #from webdriver_manager.chrome import ChromeDriverManager
 #from selenium.webdriver.chrome.service import Service as ChromeService
+#from selenium.webdriver.chrome.options import Options
 from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.firefox.service import Service as GeckoService
-from selenium.webdriver.common.keys import Keys 
-from selenium.webdriver.common.by import By 
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
-from selenium_stealth import stealth
+#from selenium.webdriver.common.by import By 
+#from selenium.webdriver.common.keys import Keys 
+#from selenium_stealth import stealth
 
 # -------------------------------------------------------------------------
 # Scraping Function
@@ -37,23 +38,25 @@ from selenium_stealth import stealth
 @st.cache_data(show_spinner=False)
 def scrape_perfume(website):
     # Visit specific perfume website and obtain html code
-    service = GeckoService(GeckoDriverManager().install())
-
-    opts = Options()
-    opts.add_argument("--headless")
-    opts.add_argument("--disable-gpu")
+    
+    # CHROME SCRAPING OPTIONS
+    #opts = Options()
+    #opts.add_argument("--headless")
+    #opts.add_argument("--disable-gpu")
     #service = ChromeService(ChromeDriverManager().install())
+    #driver = webdriver.Chrome(service=service, options=opts)
+    
+    # FIREFOX SCRAPING OPTIONS
+    opts = FirefoxOptions()
+    opts.add_argument("--headless")      # explicitly headless
+    opts.add_argument("--disable-gpu")   # (optional for Firefox)
+    profile = webdriver.FirefoxProfile()
+    profile.set_preference("dom.webdriver.enabled", False)
+    #profile.set_preference("useAutomationExtension", False)
+    opts.profile = profile
     service = GeckoService(GeckoDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=opts) #edit
-    stealth(
-        driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True,
-        )
+    driver  = webdriver.Firefox(service=service, options=opts)
+    #stealth(driver, languages=["en-US", "en"], vendor="Google Inc.", platform="Win32", webgl_vendor="Intel Inc.", renderer="Intel Iris OpenGL Engine", fix_hairline=True,)
     try:
         driver.get(website)
         WebDriverWait(driver, 20).until(
