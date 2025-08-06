@@ -1,5 +1,6 @@
 name: totallymakescents
 channels:
+  - defaults
   - conda-forge
 dependencies:
   - matplotlib >= 3.8
