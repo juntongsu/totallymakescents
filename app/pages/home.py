@@ -53,6 +53,7 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 #       Concatenate with 'app/', 'data/', or 'recommender/'
 #       to access those respective directories
 path = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
+path_image = path + 'app/images/'
 
 st.set_page_config(
     page_title='TotallyMakeScents Max',
@@ -71,7 +72,7 @@ col1, col2 = st.columns([2, 4])
 with col1:
     # Logo
     # -------------------------------------------------------------------------
-    st.image(image = 'images/tms-logo.png',
+    st.image(image = path_image + 'tms-logo.png',
             width = 320,
             use_container_width = False)
 
