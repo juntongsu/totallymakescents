@@ -32,7 +32,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 #from selenium.webdriver.common.keys import Keys 
 #from selenium_stealth import stealth
 
-@st.experimental_singleton
+@st.experimental_memo
 def installff():
   os.system('sbase install geckodriver')
   os.system('ln -s /home/appuser/venv/lib/python3.12/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
