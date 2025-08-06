@@ -17,15 +17,18 @@ import datetime
 from pathlib import Path
 
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from splinter import Browser
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
+from selenium import webdriver            
+#from splinter import Browser
+#from webdriver_manager.chrome import ChromeDriverManager
+#from selenium.webdriver.chrome.service import Service as ChromeService
+#from selenium.webdriver.chrome.options import Options
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.firefox.service import Service as GeckoService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
-from selenium_stealth import stealth
+#from selenium.webdriver.common.by import By 
+#from selenium.webdriver.common.keys import Keys 
+#from selenium_stealth import stealth
 
 from app.pages.helper_funcs import *
 
