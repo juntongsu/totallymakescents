@@ -104,7 +104,7 @@ with col2:
     st.write(f":material/clock_loader_10: Top: {potd['Top']}")
     st.write(f":material/clock_loader_40: Middle: {potd['Middle']}")
     st.write(f":material/clock_loader_90: Base: {potd['Base']}")
-    st.subheader(':material/ent: Main Accords')
+    st.subheader(':material/ent: Accords')
     display_accords(accord_data)
 
 # Environment Information
