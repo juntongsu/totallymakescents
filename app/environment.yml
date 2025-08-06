@@ -16,6 +16,6 @@ dependencies:
     - selenium
     - selenium-stealth
     - splinter
-    - webdriver-manager >=6.2.0
+    - webdriver-manager
     - plotly
     - streamlit-extras
