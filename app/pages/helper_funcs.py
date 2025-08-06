@@ -21,8 +21,10 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from selenium import webdriver            
 from splinter import Browser
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
+#from webdriver_manager.chrome import ChromeDriverManager
+#from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.firefox.service import Service as GeckoService
 from selenium.webdriver.common.keys import Keys 
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support.ui import WebDriverWait
@@ -35,13 +37,14 @@ from selenium_stealth import stealth
 @st.cache_data(show_spinner=False)
 def scrape_perfume(website):
     # Visit specific perfume website and obtain html code
-    service = ChromeService(ChromeDriverManager().install())
+    service = GeckoService(GeckoDriverManager().install())
 
     opts = Options()
     opts.add_argument("--headless")
     opts.add_argument("--disable-gpu")
-    service = ChromeService(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=opts)
+    #service = ChromeService(ChromeDriverManager().install())
+    service = GeckoService(GeckoDriverManager().install())
+    driver = webdriver.Chrome(service=service, options=opts) #edit
     stealth(
         driver,
         languages=["en-US", "en"],
@@ -190,7 +193,7 @@ def radar_chart(longevity_score,sillage_score,gender_score,price_score,rating_sc
     st.plotly_chart(fig, use_container_width=False,width=400)
     
 # -------------------------------------------------------------------------
-# Environment Pie Charts
+# Environment Graphs
 # -------------------------------------------------------------------------
 def environment_chart(environment):
     dark_bg = "#0e1117"
@@ -348,3 +351,11 @@ def display_accords(data):
     ax.axis('off')
     plt.tight_layout()
     st.pyplot(fig, use_container_width=True)
+    
+    
+# -------------------------------------------------------------------------
+# Get perfume image url
+# -------------------------------------------------------------------------
+def get_img_fragrantica(input_url):
+    perfume_id = input_url.split('-')[-1].split('.')[0]
+    return f'https://fimgs.net/mdimg/perfume-thumbs/375x500.{perfume_id}.jpg'

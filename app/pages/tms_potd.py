@@ -44,6 +44,7 @@ st.set_page_config(
     layout="wide",                # ← uses the full width
     initial_sidebar_state="auto"  # optional
 )
+
 st.title('Perfume of the Day')
 
 st.write(':material/calendar_today: ', datetime.date.today())
@@ -72,12 +73,19 @@ rating_score    = round(100.0*rating/5,2)
 # Display Perfume Information
 # -------------------------------------------------------------------------
 
-# Name and Brand
-st.header(':material/fragrance: {name} by {brand}'.format(name=potd['Perfume'],brand=potd['Brand']))
-st.link_button(
-    'Find more details and Reviews at Fragrantica.com :material/arrow_outward: ',
-    f"{potd['url']}",
-)
+col1, col2 = st.columns([1,10])
+with col1:
+    img = get_img_fragrantica(potd['url'])
+    st.image(image = img,
+            width = 100,
+            use_container_width = False)
+with col2:
+    # Name, Brand, Link
+    st.header(':material/fragrance: {name} by {brand}'.format(name=potd['Perfume'],brand=potd['Brand']))
+    st.link_button(
+        'Find more details and Reviews at Fragrantica.com :material/arrow_outward: ',
+        f"{potd['url']}",
+    )
 
 col1, col2, col3 = st.columns([2, 2, 2])
 
@@ -93,8 +101,6 @@ with col2:
     st.write(f":material/clock_loader_90: Base: {potd['Base']}")
     st.subheader(':material/ent: Main Accords')
     display_accords(accord_data)
-
-
 
 # Environment Information
 with col3:
