@@ -3,7 +3,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-st.logo(image = 'images/tms-logo.png',
+path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
+path_image = path_total + 'app/images/'
+
+st.logo(image = path_image + 'tms-logo.png',
         size = 'large')
 
 # Pages
