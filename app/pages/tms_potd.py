@@ -27,8 +27,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 from selenium_stealth import stealth
 
-# from app.pages.helper_funcs import *
-from recommender.version_epsilon.helper_funcs import *
+from app.pages.helper_funcs import *
+# from recommender.version_epsilon.helper_funcs import *
 
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))

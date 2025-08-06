@@ -22,7 +22,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver            
 from splinter import Browser
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service# as ChromeService
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.core.os_manager import ChromeType
 from selenium.webdriver.common.keys import Keys 
 from selenium.webdriver.common.by import By 
 from selenium.webdriver.support.ui import WebDriverWait
@@ -35,13 +36,12 @@ from selenium_stealth import stealth
 @st.cache_data(show_spinner=False)
 def scrape_perfume(website):
     # Visit specific perfume website and obtain html code
-    # service = ChromeService(ChromeDriverManager().install())
+    service = ChromeService(ChromeDriverManager().install())
 
-    opts = Options()
+    # opts = Options()
+    opts = webdriver.ChromeOptions()
     opts.add_argument("--headless")
     opts.add_argument("--disable-gpu")
-    # service = ChromeService(ChromeDriverManager().install())
-    service = Service(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service, options=opts)
     stealth(
         driver,
