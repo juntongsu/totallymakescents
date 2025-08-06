@@ -55,6 +55,7 @@ def scrape_perfume(website):
     
     # FIREFOX SCRAPING OPTIONS
     opts = FirefoxOptions()
+    # opts.binary_location = GeckoDriverManager().install()
     opts.add_argument("--headless")      # explicitly headless
     opts.add_argument("--disable-gpu")   # (optional for Firefox)
     profile = webdriver.FirefoxProfile()

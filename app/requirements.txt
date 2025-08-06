@@ -8,7 +8,6 @@ gcsfs
 beautifulsoup4
 selenium
 webdriver-manager
-geckodriver
 torch
 torchvision
 plotly
