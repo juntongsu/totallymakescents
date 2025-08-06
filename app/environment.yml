@@ -15,6 +15,7 @@ dependencies:
     - gcsfs
     - beautifulsoup4
     - selenium
+    - seleniumbase
     - selenium-stealth
     - splinter
     - webdriver-manager
