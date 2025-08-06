@@ -8,6 +8,7 @@ from pandas.api.types import (
     is_categorical_dtype,
     is_numeric_dtype,
 )
+from st_files_connection import FilesConnection
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 # path_total = '../'
@@ -25,7 +26,9 @@ from recommender.version_epsilon.recommender_func import *
 st.title('TotallyMakeScents')
 st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
 
-df_search = pd.read_parquet('{}search_filter.parquet'.format(path_data))
+conn = st.connection('gcs', type=FilesConnection)
+
+df_search = conn.read("totallymakescents/search_filter.parquet", input_format="parquet", ttl=600)
 df_search = df_search.drop(columns=['url'])
 filter_columns = pd.Series(['Gender', 'Year', 'Country'], dtype='string')
 search_columns = pd.Series(['Perfume', 'Brand', 'Top', 'Middle', 'Base', 'Accords'])
