@@ -13,22 +13,31 @@ import time
 import random
 import re
 import requests
-import sys 
+import os, sys
 import pathlib
 import datetime
 from pathlib import Path
 
 from bs4 import BeautifulSoup
 from selenium import webdriver            
-from splinter import Browser
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.core.os_manager import ChromeType
-from selenium.webdriver.common.keys import Keys 
-from selenium.webdriver.common.by import By 
+#from splinter import Browser
+#from webdriver_manager.chrome import ChromeDriverManager
+#from selenium.webdriver.chrome.service import Service as ChromeService
+#from selenium.webdriver.chrome.options import Options
+from webdriver_manager.firefox import GeckoDriverManager
+from selenium.webdriver.firefox.service import Service as GeckoService
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.chrome.options import Options
-from selenium_stealth import stealth
+#from selenium.webdriver.common.by import By 
+#from selenium.webdriver.common.keys import Keys 
+#from selenium_stealth import stealth
+
+@st.experimental_singleton
+def installff():
+  os.system('sbase install geckodriver')
+  os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
+
+_ = installff()
 
 # -------------------------------------------------------------------------
 # Scraping Function
@@ -36,22 +45,25 @@ from selenium_stealth import stealth
 @st.cache_data(show_spinner=False)
 def scrape_perfume(website):
     # Visit specific perfume website and obtain html code
-    service = ChromeService(ChromeDriverManager().install())
-
-    # opts = Options()
-    opts = webdriver.ChromeOptions()
-    opts.add_argument("--headless")
-    opts.add_argument("--disable-gpu")
-    driver = webdriver.Chrome(service=service, options=opts)
-    stealth(
-        driver,
-        languages=["en-US", "en"],
-        vendor="Google Inc.",
-        platform="Win32",
-        webgl_vendor="Intel Inc.",
-        renderer="Intel Iris OpenGL Engine",
-        fix_hairline=True,
-        )
+    
+    # CHROME SCRAPING OPTIONS
+    #opts = Options()
+    #opts.add_argument("--headless")
+    #opts.add_argument("--disable-gpu")
+    #service = ChromeService(ChromeDriverManager().install())
+    #driver = webdriver.Chrome(service=service, options=opts)
+    
+    # FIREFOX SCRAPING OPTIONS
+    opts = FirefoxOptions()
+    opts.add_argument("--headless")      # explicitly headless
+    opts.add_argument("--disable-gpu")   # (optional for Firefox)
+    profile = webdriver.FirefoxProfile()
+    profile.set_preference("dom.webdriver.enabled", False)
+    #profile.set_preference("useAutomationExtension", False)
+    opts.profile = profile
+    service = GeckoService(GeckoDriverManager().install())
+    driver  = webdriver.Firefox(service=service, options=opts)
+    #stealth(driver, languages=["en-US", "en"], vendor="Google Inc.", platform="Win32", webgl_vendor="Intel Inc.", renderer="Intel Iris OpenGL Engine", fix_hairline=True,)
     try:
         driver.get(website)
         WebDriverWait(driver, 20).until(
@@ -114,6 +126,92 @@ def scrape_perfume(website):
         environment = np.zeros(6)
         
     return accord_data,description,rating,longevity,sillage,fem_masc,price,environment 
+
+
+# # -------------------------------------------------------------------------
+# # Scraping Function
+# # -------------------------------------------------------------------------
+# @st.cache_data(show_spinner=False)
+# def scrape_perfume(website):
+#     # Visit specific perfume website and obtain html code
+#     service = ChromeService(ChromeDriverManager().install())
+
+#     # opts = Options()
+#     opts = webdriver.ChromeOptions()
+#     opts.add_argument("--headless")
+#     opts.add_argument("--disable-gpu")
+#     driver = webdriver.Chrome(service=service, options=opts)
+#     stealth(
+#         driver,
+#         languages=["en-US", "en"],
+#         vendor="Google Inc.",
+#         platform="Win32",
+#         webgl_vendor="Intel Inc.",
+#         renderer="Intel Iris OpenGL Engine",
+#         fix_hairline=True,
+#         )
+#     try:
+#         driver.get(website)
+#         WebDriverWait(driver, 20).until(
+#             lambda d: d.execute_script("return document.readyState") == "complete"
+#         )
+#         perfume_soup = BeautifulSoup(driver.page_source, "html.parser")
+#         notes_are_categorized = perfume_soup.find("h2", string="Perfume Pyramid")
+#     finally:
+#         driver.quit()
+
+#     # Extract info from html
+
+#     pattern = r'([\d.]+)%'  # re pattern for searching
+
+#     # Accords
+#     accords = perfume_soup.find_all('div',class_='accord-bar')
+#     accord_data = []
+#     try:
+#         accord_data.extend(
+#             (accord.text, 
+#             float(re.search(pattern, accord['style']).group(1)))
+#             for accord in accords
+#         )
+#     except Exception:
+#         accord_data = []  
+        
+#     # Description
+#     try:
+#         description = perfume_soup.find('div',itemprop="description").p.get_text()
+#     except Exception:
+#         description = ''
+
+#     # Rating (out of 5)
+#     try:
+#         rating = float(perfume_soup.find('span',itemprop='ratingValue').text)
+#         num_votes = int(perfume_soup.find('span',itemprop='ratingCount').text)
+#     except Exception:
+#         rating = ''
+#         num_votes = 0
+        
+#     # User descriptions (longevity, sillage, gender, price)
+#     try:
+#         ratings = np.array([int(x.text) for x in perfume_soup.find_all('span',class_="vote-button-legend")[11:30]])
+#         longevity = (ratings[:5]/sum(ratings[:5])) if sum(ratings[:5])!=0 else np.zeros(5)
+#         sillage = (ratings[5:9]/sum(ratings[5:9])) if sum(ratings[5:9])!=0 else np.zeros(4)
+#         fem_masc = (ratings[9:14]/sum(ratings[9:14])) if sum(ratings[9:14])!=0 else np.zeros(5)
+#         price = (ratings[14:19]/sum(ratings[14:19])) if sum(ratings[14:19])!=0 else np.zeros(5)
+#     except Exception:
+#         longevity = np.zeros(5)
+#         sillage = np.zeros(4)
+#         fem_masc =  np.zeros(5)
+#         price = np.zeros(5)
+
+#     # Environment (seasons, day/night
+#     try:
+#         environment = perfume_soup.find_all('div',style="width: 100%; height: 0.3rem; border-radius: 0.2rem; background: rgba(204, 224, 239, 0.4);")[8:]
+#         environment = [str(tag.div) for tag in environment]
+#         environment = np.array([float(re.search(pattern, tag).group(1)) for tag in environment])
+#     except Exception:
+#         environment = np.zeros(6)
+        
+#     return accord_data,description,rating,longevity,sillage,fem_masc,price,environment 
 
 # -------------------------------------------------------------------------
 # Radar Chart for Perfume Stats

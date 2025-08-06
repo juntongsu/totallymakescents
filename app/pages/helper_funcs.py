@@ -55,7 +55,7 @@ def scrape_perfume(website):
     #profile.set_preference("useAutomationExtension", False)
     opts.profile = profile
     service = GeckoService(GeckoDriverManager().install())
-    driver  = webdriver.Firefox(service=service, options=opts)
+    driver  = webdriver.Firefox(service=service, options=opts, executable_path="/home/appuser/.conda/bin/geckodriver")
     #stealth(driver, languages=["en-US", "en"], vendor="Google Inc.", platform="Win32", webgl_vendor="Intel Inc.", renderer="Intel Iris OpenGL Engine", fix_hairline=True,)
     try:
         driver.get(website)
