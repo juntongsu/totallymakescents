@@ -1,86 +1,119 @@
 # TotallyMakeScents
-##### Juntong Su and Yevgeniya (Jonah) Tarasova
+##### Juntong Su, Ngan (Elly) Do, and Fernando Liu Lopez
 
 ## Introduction
 
-We developed a perfume recommendation system that returns a list of perfumes from user preferences according to the tastes of similar users and the notes of perfumes. 
+### Workflow
+```mermaid
+    ---
+    config:
+    theme: redux
+    layout: dagre
+    ---
+    flowchart TB
+        A["Users Data"] --> B(["Collaborative Filtering"])
+        B --> C["List from Users"]
+        n1["Notes Data"] --> n3(["Content Based Filtering"])
+        n3 --> n4["List from Notes"]
+        C --> n5["Combined List"]
+        n4 --> n5
+        n5 --> n6["Reordered List"]
+        n2["Full Data"] --> n7["Summary of Reviews"]
+        u1["User Query"] --> n8["Ranked Subthemes"]
+        n8 --> n9["Generated Tags"]
+        n7 --> n10(["SentenceBERT"])
+        n9 --> n10
+        n10 --> n11["List of Perfumes"]
+        n11 --> n12["Reordered List"] & n18["Testing"] & n20["Visualization"]
+        n12 --> n13["Generated Text Explanations"]
+        n14["Kaggle"] --> n1 & n22["Reviews Data"]
+        n15["Fragrantica"] -- FKS --> n2
+        n16["Published Paper"] --> A
+        n5 --> n17["Testing"] & n19["Visualization"]
+        n21["Key Characteristics"] --> n20 & n10
+        n2 --> n21
+        n22 --> n2
+        n6 --> n23["TotallyMakeScents DS"]
+        n19 --> n23
+        n13 --> n24["TotallyMakeScents DL"]
+        n20 --> n24
+        A@{ shape: db}
+        C@{ shape: lin-proc}
+        n1@{ shape: db}
+        n4@{ shape: lin-proc}
+        n5@{ shape: lin-proc}
+        n6@{ shape: lin-proc}
+        n2@{ shape: disk}
+        n7@{ shape: disk}
+        u1@{ shape: doc}
+        n8@{ shape: docs}
+        n9@{ shape: tag-doc}
+        n11@{ shape: lin-proc}
+        n12@{ shape: lin-proc}
+        n18@{ shape: paper-tape}
+        n20@{ shape: paper-tape}
+        n13@{ shape: procs}
+        n14@{ shape: das}
+        n22@{ shape: cyl}
+        n15@{ shape: das}
+        n16@{ shape: das}
+        n17@{ shape: paper-tape}
+        n19@{ shape: paper-tape}
+        n21@{ shape: disk}
+```
 
-Choosing a perfume on the internet is almost always difficult, especially for a fresh customer without access to samples. Flipping through the perfume encyclopedia, drowning in the sea of top, middle, and base notes, deciphering the ingredients and accords, emerging in the comments and debates on fragrance forums, visualizing the descriptions from KOLs – we got rid of all those hassles with a straightforward app. Just enter the scents and the sentiments, we make scents for the users within a few seconds. Our recommender lifts the burden from the customers, simplifies the window shopping process, and welcomes more customers into the field. 
+### Repository Structure
+```text
+totallymakescents/
+├── app/
+│   ├── pages/
+│   │   ├── home.py
+│   │   └── tms1.py
+│   └── images/
+│   ├── totallymakescents.py
+├── data/
+│   ├── combined_df_classify_reviews.parquet
+├── web_scraping/
+├── data_analysis/
+├── generated_data/
+├── models/
+├── recommender/
+├── tests/
+└── README.md        
 
-Here’s our product, TotallyMakeScents. The customers can enter the perfumes they like and the perfumes they avoid, and we produce a list. 
+Note: The full tree will be generated once we have cleaned up the repo
 
-The strengths of our product include: 
-1. It accepts new users. If a user enters nothing, which is *Totally* acceptable, the system will consider them new to perfumes and return a list for newbies. 
-2. It provides an option to enter dislikes. Negative opinions are *Totally* handled.
-3. It warns about allergy. This function is *Totally* original. If a user checks this box and tells us which perfumes they are allergic to, we will provide an allergy warning in the final list. 
-4. It can be adjusted with sliders. 
-- E&I slider: user-based recommendations and popularity
-- T&F slider: note-based recommendations and classification
-- J&P slider: expectations or surprises! 
-- N&S slider: is idle for now and will be fully functional in the future (see sec.Future)
-5. It takes unlimited entries as long as the perfumes are in our library. The more we know about the users, the better the recommender performs. 
+## Data
+Our primary datasets were the publicly available (1) [Fragrantica dataset](https://www.kaggle.com/datasets/olgagmiufana1/fragrantica-com-fragrance-dataset) from Kaggle, which contains basic information about perfumes, including their notes and accords, and another (2) [Fragrantica dataset](https://www.kaggle.com/datasets/joehusseinmama/fragrantica-data/data) that shares many perfumes with the first one but also includes a “reviews” column. To enhance our data, we developed custom (3) [web-scraping functions](https://github.com/juntongsu/totallymakescents/blob/main/web_scraping/frag_perf_scrape.ipynb) capable of doubling both the size of the database and the number of available features (see Figure 1). Due to time constraints, the full compilation of the improved dataset was consigned as a future objective. However, we repurposed the scraping tools to operate in the background at runtime once recommendations are generated, ensuring users to see detailed information about their recommended perfumes (see Figure 2).
 
-## Datasets
+<figure>
+  <img src="https://docs.google.com/document/d/1WRvKoKcWSfjRiFXRX5AFMJU_BE2a6tHlMiJMigyyJio/edit?usp=sharing" alt="Figure 1" width=80%>
+  <figcaption>Figure 1.</figcaption>
+</figure>
 
-Our recommendation system combines content-based and collaborative filtering with multiple large datasets. 
+<figure>
+  <img src="https://docs.google.com/document/d/1WRvKoKcWSfjRiFXRX5AFMJU_BE2a6tHlMiJMigyyJio/edit?tab=t.8u35tbo61hib" alt="Figure 2">
+  <figcaption>Figure 2.</figcaption>
+</figure>
 
-For collaborative filtering we used *The Perfume Co-preference Network* dataset (user preference dataset), which is one of the main results from [this research](https://arxiv.org/abs/2410.19177) (K. Kalashi et al, 2024). The dataset contains 36,434 reviews and sentiments on the scents of perfumes from 7,387 unique users collected from the Persian retail platform Atrafshan. The dataset was cleaned by dropping NaN rows and unused columns. 
+For model training, we combined (4) [scraped data](https://github.com/juntongsu/totallymakescents/blob/main/web_scraping/frag_notes_scrape.ipynb) from Fragrantica and FindaScent, synthetically generated perfume descriptions (5) [1](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/perfume_descriptions.csv) (6) [2](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/perfume_descriptions_creative.csv), and hand-crafted data. The (7) [descriptive perfume data](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/findascent_note_descriptions.csv) and perfume descriptions were used to allow models to understand perfume notes and the sensory language associated with each. Additionally, we developed (8) [scripts](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/generating_training_data.ipynb) to generate a (9) [question-answer training set](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/training_data_chatml.jsonl) designed to generate relevant perfume notes from abstract queries and situational prompts.
 
-For content-based filtering we experimented with the (1) [Fragrantica](https://www.kaggle.com/datasets/olgagmiufana1/fragrantica-com-fragrance-dataset) dataset, including columns of perfume name, top notes, middle notes, and base notes for more than 24,000 perfumes; (2) [Aromo](https://www.kaggle.com/datasets/olgagmiufana1/aromo-ru-fragrance-dataset) dataset with similar columns for more than 78,400 perfumes. In addition to the columns listed above, we also used url and rating counts for data cleaning. 
 
-For consistency, we selected the overlapping perfumes between content-based and user-based datasets. We discarded perfumes with the same names unless one of them has an overwhelmingly large number of ratings. Despite the different naming conventions, we ended up choosing Fragrantica, since it has more overlaps (804). 
+## Model
+Our recommender combines two models: mistral-7B-v0.3 and all-MiniLM-L6-v2. We applied continued pre-training to Mistral using 2055 entries of descriptive perfume data, using it to generate natural-language explanations connecting recommendations to the user’s query. In addition, we experimented with a fine-tuned Unsloth/LLaMA-3.2-3B-Instruct model to generate similarly styled explanations with smaller memory and compute requirements. We further fine-tuned Mistral with 2000 question-answer pairs mapping abstract perfume queries to relevant perfume notes. The user’s query and the generated tags were then passed to the semantic search model all-MiniLM-L6-v2. The tags expanded the vocabulary through which the model could produce associations, allowing for more relevant recommendations. Furthermore, the tags accounted for users whose queries were brief, abstract, or lacking in specialized perfume terminology.
 
-The initial embeddings for content-based filtering were created by one-hot encoding, resulting in a sparse representation of high dimensional perfume-note matrices. 
+After obtaining the embeddings for the user's query and the generated tags, we proceed to compare them to the perfume embeddings generated from our primary datasets. To build the perfume embeddings, we combined notes, accords, and user reviews, where reviews were first classified by sentiment using a (10) [pretrained DistilBERT model](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), with positive reviews receiving higher weights. Based on embedding similarity, we return the top-k most relevant perfumes to user query.
 
-## Models
 
-We decided to use a hybrid of three models: A user-based model (aka collaborative filtering) that recommended perfumes based on how similar a user’s preferences were to those of other users in our dataset; a content-based model that recommended perfumes with similar notes to perfumes the user enjoyed in the past; and a model that recommended the most popular perfumes among users deemed “relevant” enough. In order to measure similarity between users and similarity between notes, we used cosine similarity, while “relevant” users were simply those who had one liked perfume in common with the target user. Each model takes in a list of liked and disliked perfumes and outputs a recommendation list. 
+## Testing
+We tested our system on two query types: standard and non-standard, based on different levels of user experience. Experienced users, who are familiar with perfume terms, might ask standard queries such as “I want something {accord} with {note1} and {note2} for {occasion}”. These queries contain direct references to perfume-related terms, so we skip the tag generation step and feed them directly into the BERT-model for scoring. On the other hand, non-standard queries such as “What perfumes capture the essence of a natural new home?” potentially from new users who do not know perfume-related vocabulary. For these, we use an LLM to generate accord-related and note-related tags before performing the recommendations. 
 
-During testing we observed that, for users on whom we had information on fewer than twenty total likes and dislikes, the popularity model best predicted their preferences. However, the other two models had greater improvements in performance than the popularity model when we had more user data. It should be noted that the user based model inherently has a popularity bias, while the content-based model does not. As one goal for our recommender is to help users discover perfumes they may have otherwise overlooked, our final model pulls from all three of the aforementioned models.
+Each model returns the top-3 perfumes per query. Without ground truth, we used human preference labeling: Yes (1) means the perfume is well-related to the query, and no (0) means the perfume is poorly related.
 
-We first allow the user to decide the split they prefer between the user and content-based models. As the user based model has a popularity bias, and performs worse than the popularity model for users who have given us fewer than twenty total likes and dislikes, the user based model is replaced with the popularity model when the user gives us fewer than twenty total likes and dislikes. 
-
-## Testing 
-
-For testing we used the user preferences dataset to generate mock user profiles. To do this, we first reserved 80% of the users for our training data while leaving 20% of the users alone to be the final testing data. Within the training data we looked for users who had reviewed at least ten perfumes, and removed 30% of those users from the set to be our validation set. We split the reviews of each user in the validation set in two and used one half to run our models, while reserving the other half to evaluate the models’ performance. After running our tests on a few splits of the training data, we determined our final model and ran the same tests on our testing data. 
-
-To evaluate our models we used two methods: The first was a hit counter. We had each of our models generate a list of 20 recommendations, generated three lists of 20 random perfumes, along with a list of the top twenty perfumes overall. Then we computed the overlap between each list and the half of the data reserved for evaluation, before comparing the results. 
-
-The second evaluation method consisted of using the perfume ratings generated by the user, popularity, and content-based models, as well a randomly generated list of of ratings (that had the same positive to negative review split as the training data) then using cosine similarity to compare the ratings given by the respective models to the true ratings in the half of the data reserved for evaluation. Once more we compared the results of each model.
-
-The graphs shown represent a subset of results from our final tests.
-In the hit test folder, you’ll find graphs illustrating the performance of several models:
-* User-based model
-* Content-based model (labeled "notes")
-* Hybrid model (labeled "gamma")
-* Popularity model
-* Randomly generated lists (averaged)
-* Top twenty perfumes overall
-### Key observations:
-* The user-based model performs similarly to the popularity-based model. While the popularity model achieved slightly more total hits overall, the user-based model outperformed it by over 10% when focusing on users with at least twenty perfumes in their evaluation set.
-* Both of these models outperform the top twenty recommendation list, which simply recommends the most popular perfumes across the board.
-* The user-based and content-based models both significantly outperform random guessing.
-
-It’s expected that the content-based model underperforms relative to the user-based model in this test. This is partly due to the test favoring popular items and also because the evaluation is based on user preference data, which doesn’t perfectly align with the notes data used in the content-based model.
-
-In the sentiment folder, you'll find graphs from the second evaluation test. There you will find graphs illustrating the following models:
-* User-based model
-* Content-based model (labled "notes")
-* Popularity model
-* Randomly generated ratings
-### Key observations:
-
-* For both the user-based and content-based models, performance increases as the number of perfumes evaluated per user increases.
-* Both models continue to outperform random guessing.
-* While not immediately obvious from the raw graphs, comparing the average cosine similarity overall to the average for users with over twenty evaluated perfumes reveals that the user-based and content-based models improve with more data, whereas the popularity and random models remain relatively static.
-
+We then averaged the “yes” ratios across all ratings. The final results tell us that our models perform consistently well on both types of queries :
+Without tags (standard queries): Average fraction of relevant items in top-k = 0.89, or 89% (across 34 queries and 102 ratings).
+With tags (non-standard queries): Average fraction of relevant items in top-k = 0.88, or 88% (across 34 queries and 102 ratings).
 
 ## Future
 
-This project is the very beginning of a long term project. In the future, we will improve the quality of the recommendation lists by optimizing both content-based and user-based filtering models. New embeddings could be created with PCA or Autoencoders to reduce dimensionality. The customer preferences could be saved and used for predictions. Finally, the recommender should be able to generate lists of perfumes based on user queries, which could be short descriptions, moods, or even movie quotes. 
-
-*What’s it smell like in the rain, at the end of a hiking trail full of blossoms?*
-*What fragrance would a wizard wear in a magical world?*
-*Looking for a bittersweet scent for a farewell party.*
-
-Normal fragrance finders can only suggest a similar perfume to the users’ already existing preferences. We would like to accomplish more. Please stay tuned while we **MakeScents**!
+## Acknowledgements
