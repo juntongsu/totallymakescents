@@ -5,61 +5,56 @@
 
 ### Workflow
 ```mermaid
-    ---
-    config:
-    theme: redux
-    layout: dagre
-    ---
-    flowchart TB
-        A["Users Data"] --> B(["Collaborative Filtering"])
-        B --> C["List from Users"]
-        n1["Notes Data"] --> n3(["Content Based Filtering"])
-        n3 --> n4["List from Notes"]
-        C --> n5["Combined List"]
-        n4 --> n5
-        n5 --> n6["Reordered List"]
-        n2["Full Data"] --> n7["Summary of Reviews"]
-        u1["User Query"] --> n8["Ranked Subthemes"]
-        n8 --> n9["Generated Tags"]
-        n7 --> n10(["SentenceBERT"])
-        n9 --> n10
-        n10 --> n11["List of Perfumes"]
-        n11 --> n12["Reordered List"] & n18["Testing"] & n20["Visualization"]
-        n12 --> n13["Generated Text Explanations"]
-        n14["Kaggle"] --> n1 & n22["Reviews Data"]
-        n15["Fragrantica"] -- FKS --> n2
-        n16["Published Paper"] --> A
-        n5 --> n17["Testing"] & n19["Visualization"]
-        n21["Key Characteristics"] --> n20 & n10
-        n2 --> n21
-        n22 --> n2
-        n6 --> n23["TotallyMakeScents DS"]
-        n19 --> n23
-        n13 --> n24["TotallyMakeScents DL"]
-        n20 --> n24
-        A@{ shape: db}
-        C@{ shape: lin-proc}
-        n1@{ shape: db}
-        n4@{ shape: lin-proc}
-        n5@{ shape: lin-proc}
-        n6@{ shape: lin-proc}
-        n2@{ shape: disk}
-        n7@{ shape: disk}
-        u1@{ shape: doc}
-        n8@{ shape: docs}
-        n9@{ shape: tag-doc}
-        n11@{ shape: lin-proc}
-        n12@{ shape: lin-proc}
-        n18@{ shape: paper-tape}
-        n20@{ shape: paper-tape}
-        n13@{ shape: procs}
-        n14@{ shape: das}
-        n22@{ shape: cyl}
-        n15@{ shape: das}
-        n16@{ shape: das}
-        n17@{ shape: paper-tape}
-        n19@{ shape: paper-tape}
-        n21@{ shape: disk}
+flowchart TB
+    A["Users Data"] --> B(["Collaborative Filtering"])
+    B --> C["List from Users"]
+    n1["Notes Data"] --> n3(["Content Based Filtering"])
+    n3 --> n4["List from Notes"]
+    C --> n5["Combined List"]
+    n4 --> n5
+    n5 --> n6["Reordered List"]
+    n2["Full Data"] --> n7["Summary of Reviews"]
+    u1["User Query"] --> n8["Ranked Subthemes"]
+    n8 --> n9["Generated Tags"]
+    n7 --> n10(["SentenceBERT"])
+    n9 --> n10
+    n10 --> n11["List of Perfumes"]
+    n11 --> n12["Reordered List"] & n18["Testing"] & n20["Visualization"]
+    n12 --> n13["Generated Text Explanations"]
+    n14["Kaggle"] --> n1 & n22["Reviews Data"]
+    n15["Fragrantica"] -- FKS --> n2
+    n16["Published Paper"] --> A
+    n5 --> n17["Testing"] & n19["Visualization"]
+    n21["Key Characteristics"] --> n20 & n10
+    n2 --> n21
+    n22 --> n2
+    n6 --> n23["TotallyMakeScents DS"]
+    n19 --> n23
+    n13 --> n24["TotallyMakeScents DL"]
+    n20 --> n24
+    A@{ shape: db}
+    C@{ shape: lin-proc}
+    n1@{ shape: db}
+    n4@{ shape: lin-proc}
+    n5@{ shape: lin-proc}
+    n6@{ shape: lin-proc}
+    n2@{ shape: disk}
+    n7@{ shape: disk}
+    u1@{ shape: doc}
+    n8@{ shape: docs}
+    n9@{ shape: tag-doc}
+    n11@{ shape: lin-proc}
+    n12@{ shape: lin-proc}
+    n18@{ shape: paper-tape}
+    n20@{ shape: paper-tape}
+    n13@{ shape: procs}
+    n14@{ shape: das}
+    n22@{ shape: cyl}
+    n15@{ shape: das}
+    n16@{ shape: das}
+    n17@{ shape: paper-tape}
+    n19@{ shape: paper-tape}
+    n21@{ shape: disk}
 ```
 
 ### Repository Structure
