@@ -74,7 +74,8 @@ totallymakescents/
 ├── models/
 ├── recommender/
 ├── tests/
-└── README.md        
+└── README.md    
+```    
 
 Note: The full tree will be generated once we have cleaned up the repo
 
