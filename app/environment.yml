@@ -9,18 +9,18 @@ dependencies:
   - python = 3.12
   - scikit-learn >= 1.4
   - numpy = 1.26.4
-  - geckodriver
+  # - geckodriver
   - pip:
     - st-files-connection
-    - gdown
+    # - gdown
     - beautifulsoup4
-    - selenium
-    - seleniumbase
-    - selenium-stealth
-    - webdriver-manager
-    - unsloth
-    - sentence-transformers
+    # - selenium
+    # - seleniumbase
+    # - selenium-stealth
+    # - webdriver-manager
+    # - sentence-transformers
     - torch
     - torchvision
     - plotly
     - streamlit-extras
+    - tableauserverclient

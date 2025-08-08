@@ -12,11 +12,12 @@ st.logo(image = path_image + 'tms-logo.png',
 # Pages
 pages = {
     'Find Scents': [
-        st.Page('pages/tms_dl_v1.py', title = 'TotallyMakeScents Max', icon = ':material/travel_explore:'),
+        st.Page('pages/home.py', title = 'TotallyMakeScents Max', icon = ':material/travel_explore:'),
         st.Page('pages/tms1.py', title = 'TotallyMakeScents Lite', icon = ':material/search:'),
         st.Page('pages/tms_pro.py', title = 'TotallyMakeScents Pro', icon = ':material/database_search:')
     ],
     'Explore': [
+        st.Page('pages/data_tableau.py', title = 'Our Data', icon = ':material/table_chart_view:'),
         st.Page('pages/tms_newbee.py', title = 'Totally New', icon = ':material/psychology_alt:'),
         st.Page('pages/tms_potd.py', title = 'Perfume of the Day', icon = ':material/calendar_today:'),
     ],
