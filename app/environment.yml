@@ -12,12 +12,13 @@ dependencies:
   # - geckodriver
   - pip:
     - st-files-connection
+    - gcsfs
     # - gdown
     - beautifulsoup4
-    # - selenium
+    - selenium
     # - seleniumbase
-    # - selenium-stealth
-    # - webdriver-manager
+    - selenium-stealth
+    - webdriver-manager
     # - sentence-transformers
     - torch
     - torchvision
