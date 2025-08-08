@@ -1,6 +1,7 @@
 import streamlit as st
 import tableauserverclient as TSC
 import pandas as pd
+from io import StringIO
 
 # Set up connection.
 tableau_auth = TSC.PersonalAccessTokenAuth(
