@@ -65,7 +65,8 @@ def scrape_perfume(website):
     # In some Colab images, the binary path is needed explicitly:
     # opts.binary_location = shutil.which('chromium')
     # opts.binary_location = '/home/appuser/venv/chromedriver' # '/home/appuser/venv/chromium-browser' # "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
-    opts.setBrowserVersion("113.0.5672.126")
+    # opts.setBrowserVersion("113.0.5672.126")
+    opts.add_argument("--browserVersion=113.0.5672.126")
     driver = webdriver.Chrome(options=opts)
 
     try:
@@ -449,7 +450,7 @@ with col2:
     st.markdown('<p style="margin:0 0 4px 0; font-size:1.1em;">Tell us your story, and we will...</p>',
             unsafe_allow_html=True
     )
-    user_input = st.text_area(label='', 
+    user_input = st.text_area(label='input', 
                             placeholder='Enter your scent inspiration here...',
                             label_visibility='hidden',
                             height=68)

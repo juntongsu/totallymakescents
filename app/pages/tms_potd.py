@@ -63,7 +63,8 @@ def scrape_perfume(website):
     # In some Colab images, the binary path is needed explicitly:
     # opts.binary_location = shutil.which('chromium')
     # opts.binary_location = '/home/appuser/venv/chromedriver' # '/home/appuser/venv/chromium-browser' # "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
-    opts.setBrowserVersion("113.0.5672.126")
+    # opts.setBrowserVersion("113.0.5672.126")
+    opts.add_argument("--browserVersion=113.0.5672.126")
     driver = webdriver.Chrome(options=opts)
 
     try:
