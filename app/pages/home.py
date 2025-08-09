@@ -70,7 +70,7 @@ def scrape_perfume(website):
     # opts.binary_location = shutil.which('chromium')
     # opts.binary_location = '/home/appuser/venv/chromedriver' # '/home/appuser/venv/chromium-browser' # "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
     # opts.setBrowserVersion("113.0.5672.126")
-    opts.add_argument("--browserVersion=113.0.5672.63")
+    opts.add_argument("--browserVersion=113")
     service=Service(ChromeDriverManager(driver_version='113.0.5672.63').install())
     driver = webdriver.Chrome(service=service, options=opts)
 
