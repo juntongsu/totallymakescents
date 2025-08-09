@@ -22,7 +22,7 @@ import re
 # -------------------------------------------------------------------------
 # Scraping Function
 # -------------------------------------------------------------------------
-@st.cache_data(show_spinner=False)
+# @st.cache_data(show_spinner=False)
 def scrape_perfume(website):
     # Visit specific perfume website and obtain html code
 
