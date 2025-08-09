@@ -1,6 +1,5 @@
 name: totallymakescents
 channels:
-  - defaults
   - conda-forge
 dependencies:
   - matplotlib >= 3.8
@@ -14,7 +13,7 @@ dependencies:
     - gcsfs
     - beautifulsoup4
     - selenium
-    - seleniumbase
+    - chromedriver-binary
     - plotly
     - streamlit-extras
     - tableauserverclient
