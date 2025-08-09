@@ -20,6 +20,7 @@ import plotly.graph_objects as go
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import shutil
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 import re
@@ -50,7 +51,8 @@ def scrape_perfume(website):
     opts.add_experimental_option('useAutomationExtension', False)
     opts.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36")
     # In some Colab images, the binary path is needed explicitly:
-    opts.binary_location = "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
+    opts.binary_location = shutil.which('chromium-browser')
+    # opts.binary_location = "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
     driver = webdriver.Chrome(options=opts)
 
     try:
