@@ -1,68 +1,34 @@
 # -------------------------------------------------------------------------
 # Import libraries
 # -------------------------------------------------------------------------
-import streamlit as st 
+import streamlit as st
+from streamlit_extras.let_it_rain import rain
+
 import numpy as np
 import pandas as pd
-import pathlib
-import time
+
 import sys
+import pathlib
+import datetime
 
-# Deep Learning
-# -------------------------------------------------------------------------
-import torch
-# add
-
-# Web Scraping
-# -------------------------------------------------------------------------
-from bs4 import BeautifulSoup
-from selenium import webdriver
-
-#from webdriver_manager.chrome import ChromeDriverManager
-#from selenium.webdriver.chrome.service import Service as ChromeService
-#from webdriver_manager.firefox import GeckoDriverManager
-#from selenium.webdriver.chrome.options import Options
-
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.firefox.service import Service as GeckoService
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.support.ui import WebDriverWait
-
-#from splinter import Browser
-#from selenium.webdriver.common.keys import Keys
-#from selenium.webdriver.common.by import By
-#from selenium_stealth import stealth
-
-
-# Extras
-# -------------------------------------------------------------------------
-from streamlit_extras.let_it_rain import rain
-from streamlit_extras.grid import grid
-from streamlit.components.v1 import html
-
-from pages.helper_funcs import *
+# from pages.helper_funcs import *
+from recommender.version_epsilon.helper_funcs import *
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 
 # -------------------------------------------------------------------------
-# Set up and Loading Models
+# Set up
 # -------------------------------------------------------------------------
-
-# Path to access data files non-locally.
-#       Concatenate with 'app/', 'data/', or 'recommender/'
-#       to access those respective directories
 path = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_image = path + 'app/images/'
+path_data = path + 'data/'
 
+#--------------------------HOME PAGE---------------------------------------------
 st.set_page_config(
     page_title='TotallyMakeScents Max',
     layout="wide",                # ← enables full-width mode
     initial_sidebar_state="auto"  # optional
 )
-
-# add model loading
-
-
 # -------------------------------------------------------------------------
 # Logo and User Input
 # -------------------------------------------------------------------------
@@ -78,7 +44,7 @@ with col1:
 with col2:
     # Title
     # -------------------------------------------------------------------------
-    st.header('TotallyMakesScents.')
+    st.header('TotallyMakeScents.')
 
     # Rotating Subheaders
     # -------------------------------------------------------------------------
@@ -111,8 +77,8 @@ with col2:
     position: absolute;
     width: 100%;
     opacity: 0;
-    color: white;
-    text-align: center;
+    color: grey;
+    text-align: left;
     animation: rotate {total_duration}s ease-in-out infinite;
     }}
     {"".join(
@@ -131,7 +97,7 @@ with col2:
     </div>
     """
 
-    html(css, height=25)
+    st.markdown(css, unsafe_allow_html=True)
 
     # User Input
     # -------------------------------------------------------------------------
@@ -155,35 +121,61 @@ with col2:
 
 if generate_recommendations:
     if user_input:
-        rain(emoji="👃",font_size=54,falling_speed=3,animation_length="1")
-        with st.spinner('Generating scents...'):
-            st.write('Recommender goes here.')
-    #       
-    #
-    #  Recommender code goes here
-    #
-    #
+        st.markdown(' ')
+        rain(emoji="👃",font_size=54,falling_speed=3,animation_length="2")
+        with st.spinner('Making scents...'):
+            st.markdown("Our models require much more resources than what Streamlit Cloud provides. ")
+            st.markdown("Instead, we will show you the Perfume of the Day 100 years ago on this date:")
+            today = datetime.date.toordinal(datetime.date.today().replace(year=datetime.date.today.year - 100))
+            df_fra_standard = pd.read_csv(f'{path_data}fra_standard.csv')
+            index_potd = df_fra_standard.sample(1, random_state=today).index[0]
+            potd = df_fra_standard.iloc[index_potd]
+
+            # Starting scraping
+            accord_data, rating, longevity, sillage, fem_masc, price, environment = scrape_perfume(potd['url'])
+
+            accord_data = [ str(potd.get(f'mainaccord{i}', '')) for i in range(1, 6) ]
+            # e.g. ['rose', 'woody', fruity, aromatic, floral]
+
+            # Compute scores
+            longevity_score = (100*np.dot(longevity,range(5))/5).round(2)
+            sillage_score   = (100*np.dot(sillage,range(4))/4).round(2)
+            gender_score    = (100*np.dot(fem_masc,range(5))/5).round(2)
+            price_score     = (100*np.dot(price,range(5))/5).round(2)
+            rating_score    = round(100.0*rating/5,2)
+
+            col1, col2 = st.columns([1,10])
+            with col1:
+                img = get_img_fragrantica(potd['url'])
+                st.image(image = img,
+                        width = 100,
+                        use_container_width = False)
+            with col2:
+                # Name, Brand, Link
+                st.header(':material/fragrance: {name} by {brand}'.format(name=potd['Perfume'],brand=potd['Brand']))
+                st.link_button(
+                    'Find more details and Reviews at Fragrantica.com :material/arrow_outward: ',
+                    f"{potd['url']}",
+                )
+
+            col1, col2, col3 = st.columns([2, 2, 2])
+
+            # Radar Chart
+            with col1:
+                radar_chart(longevity_score, sillage_score, gender_score, price_score, rating_score)
+
+            # Accords and Notes
+            with col2:
+                st.subheader('𓏊 Notes')
+                st.write(f":material/clock_loader_10: Top: {potd['Top']}")
+                st.write(f":material/clock_loader_40: Middle: {potd['Middle']}")
+                st.write(f":material/clock_loader_90: Base: {potd['Base']}")
+                st.subheader(':material/ent: Accords')
+                display_accords(accord_data)
+
+            # Environment Information
+            with col3:
+                environment_chart(environment)
     else:
         st.warning('Please enter a prompt.')
-
-# -------------------------------------------------------------------------
-# Perfume Preferences 
-# Input: perfume likes and dislikes
-# -------------------------------------------------------------------------
-
-
-
-# -------------------------------------------------------------------------
-# Sidebar - Credits / About Us
-# -------------------------------------------------------------------------
-
-# with st.sidebar.expander('About this app'):
-#     st.write('This app does [blank] and was made by [blank].')
-#     st.write('Contributors:\n- Elly \n- Fernando\n- Katherine \n- Su')
-
-# -------------------------------------------------------------------------
-# Testing
-# -------------------------------------------------------------------------
-
-# rain(emoji="👃",font_size=54,falling_speed=5,animation_length="10")
 

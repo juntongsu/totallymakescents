@@ -4,38 +4,16 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import plotly.graph_objects as go
 
-import time
-import random
-import re
-import requests
 import sys
 import pathlib
 import datetime
-from pathlib import Path
 
-from bs4 import BeautifulSoup
-from selenium import webdriver            
-#from splinter import Browser
-#from webdriver_manager.chrome import ChromeDriverManager
-#from selenium.webdriver.chrome.service import Service as ChromeService
-#from selenium.webdriver.chrome.options import Options
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.firefox.service import Service as GeckoService
-from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.support.ui import WebDriverWait
-#from selenium.webdriver.common.by import By 
-#from selenium.webdriver.common.keys import Keys 
-#from selenium_stealth import stealth
-
-from app.pages.helper_funcs import *
-# from recommender.version_epsilon.helper_funcs import *
+# from app.pages.helper_funcs import *
+from recommender.version_epsilon.helper_funcs import *
 
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
-# path_total = '../'
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
@@ -65,7 +43,10 @@ potd = df_fra_standard.iloc[index_potd]
 # -------------------------------------------------------------------------
 # Scrape perfume of the day
 # -------------------------------------------------------------------------
-accord_data, description, rating, longevity, sillage, fem_masc, price, environment = scrape_perfume(potd['url'])
+accord_data, rating, longevity, sillage, fem_masc, price, environment = scrape_perfume(potd['url'])
+
+accord_data = [ str(potd.get(f'mainaccord{i}', '')) for i in range(1, 6) ]
+# e.g. ['rose', 'woody', fruity, aromatic, floral]
 
 # Compute scores
 longevity_score = (100*np.dot(longevity,range(5))/5).round(2)
@@ -73,10 +54,6 @@ sillage_score   = (100*np.dot(sillage,range(4))/4).round(2)
 gender_score    = (100*np.dot(fem_masc,range(5))/5).round(2)
 price_score     = (100*np.dot(price,range(5))/5).round(2)
 rating_score    = round(100.0*rating/5,2)
-
-# -------------------------------------------------------------------------
-# Display Perfume Information
-# -------------------------------------------------------------------------
 
 col1, col2 = st.columns([1,10])
 with col1:
