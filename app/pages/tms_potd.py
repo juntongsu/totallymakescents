@@ -23,7 +23,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 # import shutil
 # import seleniumbase
-import chromedriver_autoinstaller
+# import chromedriver_autoinstaller
 import chromedriver_binary
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -41,7 +41,7 @@ path_data = path_total + 'data/'
 #   os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/chromedriver /home/appuser/venv/bin/chromedriver')
 
 # _ = install_chromium()
-chromedriver_autoinstaller.install()
+# chromedriver_autoinstaller.install()
 
 # -------------------------------------------------------------------------
 # Scraping Function

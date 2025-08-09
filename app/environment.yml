@@ -13,8 +13,8 @@ dependencies:
     - gcsfs
     - beautifulsoup4
     - selenium == 4.11.2
-    - chromedriver-autoinstaller
-    - chromedriver-binary
+    # - chromedriver-autoinstaller
+    - chromedriver-binary-auto
     - plotly
     - streamlit-extras
     - tableauserverclient

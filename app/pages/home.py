@@ -26,7 +26,7 @@ from selenium import webdriver
 # import shutil
 # import seleniumbase
 import chromedriver_binary
-import chromedriver_autoinstaller
+# import chromedriver_autoinstaller
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 import re
