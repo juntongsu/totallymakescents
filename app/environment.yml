@@ -14,6 +14,7 @@ dependencies:
     - gcsfs
     - beautifulsoup4
     - selenium
+    - chromedriver-py
     - plotly
     - streamlit-extras
     - tableauserverclient
