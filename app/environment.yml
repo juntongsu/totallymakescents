@@ -13,6 +13,7 @@ dependencies:
     - gcsfs
     - beautifulsoup4
     - selenium == 4.11.2
+    - chromedriver-autoinstaller
     - chromedriver-binary
     - plotly
     - streamlit-extras
