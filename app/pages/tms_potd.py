@@ -29,6 +29,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from webdriver_manager.core.os_manager import ChromeType
 import re
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
@@ -69,7 +70,7 @@ def scrape_perfume(website):
     # opts.binary_location = '/home/appuser/venv/chromedriver' # '/home/appuser/venv/chromium-browser' # "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
     # opts.setBrowserVersion("113.0.5672.126")
     opts.add_argument("--browserVersion=113")
-    service=Service(ChromeDriverManager(driver_version='113.0.5672.63').install())
+    service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM, driver_version='113.0.5672.63').install())
     driver = webdriver.Chrome(service=service, options=opts)
 
     try:
