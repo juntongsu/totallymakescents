@@ -5,6 +5,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 
+import os
 import sys
 import pathlib
 import datetime
@@ -20,7 +21,8 @@ import plotly.graph_objects as go
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-import shutil
+# import shutil
+import seleniumbase
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 import re
@@ -30,6 +32,13 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
 path_data = path_total + 'data/'
+
+@st.cache_resource
+def install_chromium():
+  os.system('sbase get chromedriver')
+  os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/chromedriver /home/appuser/venv/bin/chromedriver')
+
+_ = install_chromium()
 
 # -------------------------------------------------------------------------
 # Scraping Function
@@ -51,7 +60,7 @@ def scrape_perfume(website):
     opts.add_experimental_option('useAutomationExtension', False)
     opts.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36")
     # In some Colab images, the binary path is needed explicitly:
-    opts.binary_location = shutil.which('chromium')
+    # opts.binary_location = shutil.which('chromium')
     # opts.binary_location = "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
     driver = webdriver.Chrome(options=opts)
 
