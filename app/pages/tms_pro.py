@@ -8,7 +8,7 @@ from pandas.api.types import (
     is_categorical_dtype,
     is_numeric_dtype,
 )
-from st_files_connection import FilesConnection
+# from st_files_connection import FilesConnection
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 # path_total = '../'
@@ -39,9 +39,10 @@ with col2:
     # st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
     st.write('A personal perfume recommender based on your tastes. We tailor the recommendation list by hunting down the notes and accords you like. Search and select the perfumes, and we MakeScents.')
 
-conn = st.connection('gcs', type=FilesConnection)
+# conn = st.connection('gcs', type=FilesConnection)
+# df_search = conn.read("totallymakescents/search_filter.parquet", input_format="parquet", ttl=600)
 
-df_search = conn.read("totallymakescents/search_filter.parquet", input_format="parquet", ttl=600)
+df_search = pd.read_parquet('{}tms_pro/search_filter.parquet'.format(path_data))
 df_search = df_search.drop(columns=['url'])
 filter_columns = pd.Series(['Gender', 'Year', 'Country'], dtype='string')
 search_columns = pd.Series(['Perfume', 'Brand', 'Top', 'Middle', 'Base', 'Accords'])
@@ -206,12 +207,12 @@ make_button = button_mid_column.button(
     'Totally Make Scents!',
     type='primary')
 
-persian_data_frame_clean = pd.read_csv('{}cleaned_persian.csv'.format(path_data))
-perf_names = pd.read_parquet('{}perf_names.parquet'.format(path_data))
-vec_top = pd.read_parquet('{}vec_top.parquet'.format(path_data))
-vec_mid = pd.read_parquet('{}vec_mid.parquet'.format(path_data))
-vec_base = pd.read_parquet('{}vec_base.parquet'.format(path_data))
-vec_accords = pd.read_parquet('{}vec_accords.parquet'.format(path_data))
+persian_data_frame_clean = pd.read_csv('{}tms_lite/cleaned_persian.csv'.format(path_data))
+perf_names = pd.read_parquet('{}tms_pro/perf_names.parquet'.format(path_data))
+vec_top = pd.read_parquet('{}tms_pro/vec_top.parquet'.format(path_data))
+vec_mid = pd.read_parquet('{}tms_pro/vec_mid.parquet'.format(path_data))
+vec_base = pd.read_parquet('{}tms_pro/vec_base.parquet'.format(path_data))
+vec_accords = pd.read_parquet('{}tms_pro/vec_accords.parquet'.format(path_data))
 
 
 dict_slider = {'Extremely Thinking (T)': 0., 'Thinking (T)': 0.2, 'Just A Little T': 0.4, 

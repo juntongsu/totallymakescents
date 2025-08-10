@@ -65,18 +65,21 @@ Our primary datasets were the publicly available [Fragrantica dataset](https://w
   <img src="https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/app/images/README_table1.png" alt="Table 1" width=80%>
   <figcaption>Table 1</figcaption>
 </figure>
- 
 <figure>
   <img src="https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/app/images/README_fig1.png" alt="Figure 1" width=80%>
   <figcaption>Figure 1</figcaption>
 </figure>
- 
+
+
+
 Due to time constraints, the full compilation of the improved dataset was consigned as a future objective. However, we repurposed the scraping tools to operate in the background at runtime once recommendations are generated, ensuring users to see detailed information about their recommended perfumes (see Figure 2).
 <figure>
   <img src="https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/app/images/README_fig2.png" alt="Figure 2">
   <figcaption>Figure 2</figcaption>
 </figure>
- 
+
+
+
 For model training, we combined [scraped data](https://github.com/juntongsu/totallymakescents/blob/main/web_scraping/frag_notes_scrape.ipynb) from Fragrantica and FindaScent, synthetically generated perfume descriptions [[1]](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/perfume_descriptions.csv) [[2]](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/perfume_descriptions_creative.csv), and hand-crafted data. The [descriptive perfume data](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/findascent_note_descriptions.csv) and perfume descriptions were used to allow models to understand perfume notes and the sensory language associated with each. Additionally, we developed [scripts](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/generating_training_data.ipynb) to generate a [question-answer training set](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/training_data_chatml.jsonl) designed to generate relevant perfume notes from abstract queries and situational prompts.
 
 

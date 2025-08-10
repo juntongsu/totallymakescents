@@ -33,7 +33,7 @@ with col2:
     # st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
     st.write('A personal perfume recommender based on your tastes. We tailor the recommendation list by consulting the users like you and hunting down the notes you like. Search and select the perfumes, and we MakeScents.')
 
-df_perf_names = pd.read_csv('{}archive/cleaned_perf_names_0.csv'.format(path_data))
+df_perf_names = pd.read_csv('{}tms_lite/cleaned_perf_names_0.csv'.format(path_data))
 perf_names = df_perf_names['Perfume']
 
 # input_left_column_0, input_right_column_0 = st.columns(2)
@@ -69,13 +69,13 @@ make_button = button_mid_column.button(
 st.write("Can't find what you need? The size of our perfume library Lite is 804. ")
 st.page_link('pages/tms_pro.py', label='Use the perfume database with over 20,000 perfumes :material/arrow_outward: ', icon='🦾')
 
-persian_data_frame_clean = pd.read_csv('{}cleaned_persian.csv'.format(path_data))
+persian_data_frame_clean = pd.read_csv('{}tms_lite/cleaned_persian.csv'.format(path_data))
 
 language = 0
-perf_names = pd.read_csv('{}archive/cleaned_perf_names_{}.csv'.format(path_data, language))
-vec_top = pd.read_csv('{}archive/cleaned_vec_top_{}.csv'.format(path_data, language))
-vec_mid = pd.read_csv('{}archive/cleaned_vec_mid_{}.csv'.format(path_data, language))
-vec_base = pd.read_csv('{}archive/cleaned_vec_base_{}.csv'.format(path_data, language)) 
+perf_names = pd.read_csv('{}tms_lite/cleaned_perf_names_{}.csv'.format(path_data, language))
+vec_top = pd.read_csv('{}tms_lite/cleaned_vec_top_{}.csv'.format(path_data, language))
+vec_mid = pd.read_csv('{}tms_lite/cleaned_vec_mid_{}.csv'.format(path_data, language))
+vec_base = pd.read_csv('{}tms_lite/cleaned_vec_base_{}.csv'.format(path_data, language)) 
 
 n_recs = 20
 
@@ -126,7 +126,7 @@ if make_button:
     
     if client_allergy_switch and (len(client_allergy) > 0):
         make_progress_bar.progress(90, text='Checking Allergy...')
-        df_fra_standard = pd.read_csv('{}fra_standard.csv'.format(path_data))
+        df_fra_standard = pd.read_csv('{}tms_lite/fra_standard.csv'.format(path_data))
         client_allergy = pd.Series(client_allergy, dtype='string')
         client_allergy_note, rec_list_note, rec_list_allergy_bool = client_allergy_finder(client_perfume, client_allergy, recommendation_list, df_fra_standard)
         output = pd.concat([recommendation_list, rec_list_allergy_bool], axis=1)
