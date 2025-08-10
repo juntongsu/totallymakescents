@@ -23,7 +23,7 @@ path_data = path_total + 'data/'
 
 #--------------------------HOME PAGE---------------------------------------------
 st.set_page_config(
-    page_title='TotallyMakeScents Max',
+    page_title='TotallyMakeScents',
     layout="wide",                # ← enables full-width mode
     initial_sidebar_state="auto"  # optional
 )
@@ -119,7 +119,6 @@ with col2:
 
 if generate_recommendations:
     if user_input:
-        st.markdown(' ')
         rain(emoji="👃",font_size=54,falling_speed=3,animation_length="2")
         today_100 = datetime.date.today().replace(year=datetime.date.today().year - 100)
 
@@ -139,6 +138,7 @@ if generate_recommendations:
         potd_all_notes_series = pd.Series(potd_all_notes.split(', '), name='note')
         df_potd_notes_accords = pd.merge(left=potd_all_notes_series, right=df_notes_accords[['note_group', 'note']], how='left', on='note')
         potd_accords = df_potd_notes_accords['note_group'].value_counts()
+        st.markdown(' ')
 
         col1, col2 = st.columns([1,10])
         with col1:
@@ -167,7 +167,8 @@ if generate_recommendations:
             st.write(f":material/clock_loader_40: Middle: {potd['Middle']}")
             st.write(f":material/clock_loader_90: Base: {potd['Base']}")
         
-        if st.button('Check out some example searches in our Exhibition Room :material/arrow_outward:'):
-            st.switch_page('pages/newbee.py')
+        st.divider()
+        st.subheader("Can't get enough of :rainbow[TotallyMakeScents]?")
+        st.page_link('pages/tms_newbee.py', label='Check out some example searches in our Exhibition Room :material/arrow_outward: ', icon='🖼️')
     else:
         st.warning('Please enter a prompt.')

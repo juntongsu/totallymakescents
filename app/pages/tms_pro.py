@@ -15,16 +15,29 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
+path_image = path_app + 'images/'
 path_data = path_total + 'data/'
 path_rec = path_total + 'recommender/'
 
 from recommender.version_epsilon.recommender_func import *
 
-# user_frame = pd.read_csv('{}input_pro.csv'.format(path_app), header=None)
-# user_frame.columns = ["Perfume Name", "Sentiment"]
+st.set_page_config(
+    page_title='TotallyMakeScents Pro',
+    layout="centered",
+    initial_sidebar_state="auto"  # optional
+)
 
-st.title('TotallyMakeScents')
-st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
+col1, col2 = st.columns([2, 6])
+with col1:
+    # Logo
+    # -------------------------------------------------------------------------
+    st.image(image = path_image + 'tms-logo.png',
+            width = 320,
+            use_container_width = False)
+with col2:
+    st.title('TotallyMakeScents')
+    # st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
+    st.write('A personal perfume recommender based on your tastes. We tailor the recommendation list by hunting down the notes and accords you like. Search and select the perfumes, and we MakeScents.')
 
 conn = st.connection('gcs', type=FilesConnection)
 
@@ -184,7 +197,11 @@ jp_slider = st.select_slider(
     help='This is a placeholder slider.'
 )
 
+st.markdown(':orange-badge[⚠️ USE WITH CAUTION]')
+st.write("We are glad that the full database contains more than 20,000 perfumes. However, it's a bit of a double-edged sword. :rainbow[TotallyMakeScents] Pro is currently under construction for a better recommender. Stay tuned.")
+
 button_left_column, button_mid_column, button_right_column = st.columns(3)
+    
 make_button = button_mid_column.button(
     'Totally Make Scents!',
     type='primary')
@@ -258,7 +275,7 @@ if make_button:
     else:
         output = recommendation_list
     
-    output
+    st.dataframe(output, hide_index=True)
     make_progress_bar.progress(100, text='We Made Some Scents for You')
 
     time.sleep(1)

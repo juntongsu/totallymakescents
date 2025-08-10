@@ -9,16 +9,29 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
+path_image = path_app + 'images/'
 path_data = path_total + 'data/'
 path_rec = path_total + 'recommender/'
 
 from recommender.version_delta.recommender_func import *
 
-# user_frame = pd.read_csv('{}input.csv'.format(path_app), header=None)
-# user_frame.columns = ["Perfume Name", "Sentiment"]
+st.set_page_config(
+    page_title='TotallyMakeScents Lite',
+    layout="centered",
+    initial_sidebar_state="auto"  # optional
+)
 
-st.title('TotallyMakeScents')
-st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
+col1, col2 = st.columns([2, 6])
+with col1:
+    # Logo
+    # -------------------------------------------------------------------------
+    st.image(image = path_image + 'tms-logo.png',
+            width = 320,
+            use_container_width = False)
+with col2:
+    st.title('TotallyMakeScents')
+    # st.write("What’s it smell like in the rain, at the end of a hiking trail full of blossoms? What fragrance would a wizard wear in a magical world? Looking for a bittersweet scent for a farewell party. Tell us about your story, and we MAKESCENTS.")
+    st.write('A personal perfume recommender based on your tastes. We tailor the recommendation list by consulting the users like you and hunting down the notes you like. Search and select the perfumes, and we MakeScents.')
 
 df_perf_names = pd.read_csv('{}archive/cleaned_perf_names_0.csv'.format(path_data))
 perf_names = df_perf_names['Perfume']
@@ -28,7 +41,6 @@ client_perfume_0 = st.multiselect(
     'You like these perfumes:',
     perf_names,
     placeholder='Type to search in the library',
-    help='I like it!',
     key='client_perfume_0')
 # client_sentiemnt_0 = input_right_column_0.selectbox(
 #     '',
@@ -40,7 +52,6 @@ client_perfume_1 = input_left_column_1.multiselect(
     'You avoid these perfumes',
     perf_names[~perf_names.isin(client_perfume_0)],
     placeholder='Type to search in the library',
-    help='Allergy help',
     key='client_perfume_1')
 client_allergy_switch = input_right_column_1.toggle('You have allergy to one or more of these.')
 if client_allergy_switch:
@@ -50,73 +61,13 @@ if client_allergy_switch:
         placeholder='Please specify',
         key='client_allergy')
 
-ei_slider = st.select_slider(
-    'Your MBTI',
-    options = [
-        'Extremely Extraverted (E)',
-        'Extraverted',
-        'Just A Little E',
-        'Neutral',
-        'Just A Little I',
-        'Introverted', 
-        'Extremely Introverted (I)'],
-    value = ('Neutral'),
-    key='ei_slider',
-    help='Reorder.'
-)
-
-ns_slider = st.select_slider(
-    'Your MBTI',
-    options = [
-        'Extremely Intuitive (N)',
-        'Intuitive (N)',
-        'Just A Little N',
-        'Neutral',
-        'Just A Little S',
-        'Observant (S)', 
-        'Extremely Observant (S)'],
-    value = ('Neutral'),
-    key='ns_slider',
-    label_visibility='collapsed',
-    help='This is a placeholder slider.'
-)
-
-tf_slider = st.select_slider(
-    'Your MBTI',
-    options = [
-        'Extremely Thinking (T)',
-        'Thinking (T)',
-        'Just A Little T',
-        'Neutral',
-        'Just A Little F',
-        'Feeling (F)', 
-        'Extremely Feeling (F)'],
-    value = ('Neutral'),
-    key='tf_slider',
-    label_visibility='collapsed',
-    help='This is the real note-user slider.'
-)
-
-jp_slider = st.select_slider(
-    'Your MBTI',
-    options = [
-        'Extremely Judging (J)',
-        'Judging (J)',
-        'Just A Little J',
-        'Neutral',
-        'Just A Little P',
-        'Prospecting (P)', 
-        'Extremely Prospecting (P)'],
-    value = ('Neutral'),
-    key='jp_slider',
-    label_visibility='collapsed',
-    help='This is a placeholder slider.'
-)
-
 button_left_column, button_mid_column, button_right_column = st.columns(3)
 make_button = button_mid_column.button(
     'Totally Make Scents!',
     type='primary')
+
+st.write("Can't find what you need? The size of our perfume library Lite is 804. ")
+st.page_link('pages/tms_pro.py', label='Use the perfume database with over 20,000 perfumes :material/arrow_outward: ', icon='🦾')
 
 persian_data_frame_clean = pd.read_csv('{}cleaned_persian.csv'.format(path_data))
 
@@ -126,10 +77,6 @@ vec_top = pd.read_csv('{}archive/cleaned_vec_top_{}.csv'.format(path_data, langu
 vec_mid = pd.read_csv('{}archive/cleaned_vec_mid_{}.csv'.format(path_data, language))
 vec_base = pd.read_csv('{}archive/cleaned_vec_base_{}.csv'.format(path_data, language)) 
 
-dict_slider = {'Extremely Thinking (T)': 0., 'Thinking (T)': 0.2, 'Just A Little T': 0.4, 
-            'Neutral': 0.5, 
-            'Just A Little F': 0.6, 'Feeling (F)': 0.8, 'Extremely Feeling (F)': 1.}
-
 n_recs = 20
 
 if make_button:
@@ -138,6 +85,7 @@ if make_button:
     client_sentiment = pd.Series((np.concatenate((np.ones(len(client_perfume_0), dtype=int), np.ones(len(client_perfume_1), dtype=int)*(-1)))), dtype='int', name='Sentiment')
     df_client = pd.concat([client_perfume, client_sentiment], axis=1)
     client_id = 0 
+    slider = 0.5
     client_frame = add_user_id(df_client)
     make_progress_bar.progress(30, text='Making Scents from Users Like You...')
 
@@ -160,7 +108,7 @@ if make_button:
         note_rec_list = note_recommendation_list['Perfume'].reset_index(drop=True)
         df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1)
 
-        slider = pd.Series((tf_slider)).replace(dict_slider).values
+        # slider = pd.Series((tf_slider)).replace(dict_slider).values
         recommendation_list = combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider)
     else:
         user_recommendation_list = recommender_users(client_id, client_frame, persian_data_frame_clean)
@@ -173,7 +121,7 @@ if make_button:
         note_rec_list = note_recommendation_list['Perfume'].reset_index(drop=True)
         df_rec_list = pd.concat([user_rec_list, note_rec_list], axis=1)
 
-        slider = pd.Series((tf_slider)).replace(dict_slider).values
+        # slider = pd.Series((tf_slider)).replace(dict_slider).values
         recommendation_list = combine_rec_lists(user_rec_list, note_rec_list, n_recs, slider)
     
     if client_allergy_switch and (len(client_allergy) > 0):
@@ -185,7 +133,7 @@ if make_button:
     else:
         output = recommendation_list
     
-    output
+    st.dataframe(output, hide_index=True)
     make_progress_bar.progress(100, text='We Made Some Scents for You')
 
     time.sleep(1)
