@@ -17,14 +17,13 @@ pages = {
         st.Page('pages/tms_pro.py', title = 'TotallyMakeScents Pro', icon = ':material/database_search:')
     ],
     'Explore': [
-        st.Page('pages/data_tableau.py', title = 'Our Data', icon = ':material/table_chart_view:'),
-        st.Page('pages/tms_newbee.py', title = 'Totally New', icon = ':material/psychology_alt:'),
+        st.Page('pages/tms_newbee.py', title = 'Exhibition Room', icon = ':material/wall_art:'),
         st.Page('pages/tms_potd.py', title = 'Perfume of the Day', icon = ':material/calendar_today:'),
+        st.Page('pages/data_tableau.py', title = 'Our Data', icon = ':material/table_chart_view:'),
     ],
     'About': [
         st.Page('pages/about_us.py', title = 'Meet the Team', icon = ':material/person:'),
         st.Page('pages/help.py', title = 'Help', icon = ':material/help:'),
-        st.Page('pages/test.py', title = 'Test', icon = ':material/neurology:'),
     ]
 }
 

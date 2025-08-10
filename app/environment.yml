@@ -11,11 +11,6 @@ dependencies:
   - pip:
     - st-files-connection
     - gcsfs
-    - beautifulsoup4
-    - selenium
-    - webdriver-manager
-    # - chromedriver-autoinstaller
-    # - chromedriver-binary-auto
-    - plotly
+    # - plotly
     - streamlit-extras
     - tableauserverclient
