@@ -1,10 +1,14 @@
 # TotallyMakeScents
+
 ##### Juntong Su, Ngan (Elly) Do, and Fernando Liu Lopez
 
+[![Our App!](https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/app/images/README_fig0.png "TotallyMakeScents App")](https://totallymakescents.streamlit.app)
+
 ## Introduction
-We developed a perfume recommendation system that understands user queries. It accepts various types of text input, which could be the users' favorite notes and accords, the desired occasions to wear the perfumes, or even a piece of poem about the mood. The recommender returns a list of perfumes, with vibrant graphs displaying the basic properties of the perfumes, and generated text explanations for the recommendations. Our recommender is the first that deciphers the needs of the users from plain text, and justifies its solutions with data visualizations and brief descriptions. This project saves time and energy for the customers by lifting the burden of searching for a perfume on the internet, which could be a swamp of pointless comments and debates. New users are warmly welcomed to perfumes by the user-friendly app interface and easy to understand demonstrations, even without access to samples. Perfume creators and companies can use our model for insights into perfume designs and promotions. Just enter a sentence, we make scents and it makes sense. 
+We developed a perfume recommendation system that understands user queries. It accepts various types of text input, which could be the users' favorite notes and accords, the desired occasions to wear the perfumes, or even a piece of poem about the mood. The recommender returns a list of perfumes, with vibrant graphs displaying the basic properties of the perfumes, and generated text explanations for the recommendations. Our recommender is the first that deciphers the needs of the users from plain text, and justifies its solutions with data visualizations and brief descriptions. This project saves time and energy for the customers by lifting the burden of searching for a perfume on the internet, which could be a swamp of pointless comments and debates. New users are warmly welcomed to perfumes by the user-friendly app interface and easy to understand demonstrations, even without access to samples. Perfume creators and companies can use our model for insights into perfume designs and promotions. Just enter a sentence, we make scents and it makes sense.  
 
 ### Workflow
+
 ```mermaid
 flowchart TB
     u1["User Query"] --> n8(["Mistral-7B"])
@@ -38,6 +42,7 @@ flowchart TB
 ```
 
 ### Repository Structure (Selected)
+
 ```text
 totallymakescents/
 ├── app/
@@ -98,7 +103,9 @@ totallymakescents/
 ```    
 
 ## Data
-Our primary datasets were the publicly available [Fragrantica dataset](https://www.kaggle.com/datasets/olgagmiufana1/fragrantica-com-fragrance-dataset) from Kaggle, which contains basic information about perfumes, including their notes and accords, and another [Fragrantica dataset](https://www.kaggle.com/datasets/joehusseinmama/fragrantica-data/data) that shares many perfumes with the first one but also includes a “reviews” column. To enhance our data, we developed custom [web-scraping functions](https://github.com/juntongsu/totallymakescents/blob/main/web_scraping/frag_perf_scrape.ipynb) capable of doubling both the size of the database and the number of available features (see Table 1 and Figure 1). 
+
+Our primary datasets were the publicly available [Fragrantica dataset](https://www.kaggle.com/datasets/olgagmiufana1/fragrantica-com-fragrance-dataset) from Kaggle, which contains basic information about perfumes, including their notes and accords, and another [Fragrantica dataset](https://www.kaggle.com/datasets/joehusseinmama/fragrantica-data/data) that shares many perfumes with the first one but also includes a “reviews” column. To enhance our data, we developed custom [web-scraping functions](https://github.com/juntongsu/totallymakescents/blob/main/web_scraping/frag_perf_scrape.ipynb) capable of doubling both the size of the database and the number of available features (see Table 1 and Figure 1).  
+
 <figure>
   <img src="https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/app/images/README_table1.png" alt="Table 1" width=80%>
   <figcaption>Table 1</figcaption>
@@ -109,44 +116,49 @@ Our primary datasets were the publicly available [Fragrantica dataset](https://w
   <figcaption>Figure 1</figcaption>
 </figure>
 
-Due to time constraints, the full compilation of the improved dataset was consigned as a future objective. However, we repurposed the scraping tools to operate in the background at runtime once recommendations are generated, ensuring users to see detailed information about their recommended perfumes (see Figure 2).
+---
+
+Due to time constraints, the full compilation of the improved dataset was consigned as a future objective. However, we repurposed the scraping tools to operate in the background at runtime once recommendations are generated, ensuring users to see detailed information about their recommended perfumes (see Figure 2).  
+
 <figure>
   <img src="https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/app/images/README_fig2.png" alt="Figure 2">
   <figcaption>Figure 2</figcaption>
 </figure>
 
-For model training, we combined [scraped data](https://github.com/juntongsu/totallymakescents/blob/main/web_scraping/frag_notes_scrape.ipynb) from Fragrantica and FindaScent, synthetically generated perfume descriptions [[1]](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/perfume_descriptions.csv) [[2]](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/perfume_descriptions_creative.csv), and hand-crafted data. The [descriptive perfume data](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/findascent_note_descriptions.csv) and perfume descriptions were used to allow models to understand perfume notes and the sensory language associated with each. Additionally, we developed [scripts](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/generating_training_data.ipynb) to generate a [question-answer training set](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/training_data_chatml.jsonl) designed to generate relevant perfume notes from abstract queries and situational prompts.
+---
 
+For model training, we combined [scraped data](https://github.com/juntongsu/totallymakescents/blob/main/web_scraping/frag_notes_scrape.ipynb) from Fragrantica and FindaScent, synthetically generated perfume descriptions [[1]](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/perfume_descriptions.csv) [[2]](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/perfume_descriptions_creative.csv), and hand-crafted data. The [descriptive perfume data](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/findascent_note_descriptions.csv) and perfume descriptions were used to allow models to understand perfume notes and the sensory language associated with each. Additionally, we developed [scripts](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/generating_training_data.ipynb) to generate a [question-answer training set](https://github.com/juntongsu/totallymakescents/blob/main/generated_data/training_data_chatml.jsonl) designed to generate relevant perfume notes from abstract queries and situational prompts.  
 
 ## Model
-Our recommender combines two models: `mistral-7B-v0.3` and `all-MiniLM-L6-v2`. We applied continued pre-training to Mistral using 2055 entries of descriptive perfume data, using it to generate natural-language explanations connecting recommendations to the user’s query. In addition, we experimented with a fine-tuned `Unsloth/LLaMA-3.2-3B-Instruct` model to generate similarly styled explanations with smaller memory and compute requirements. We further fine-tuned Mistral with 2000 question-answer pairs mapping abstract perfume queries to relevant perfume notes. The user’s query and the generated tags were then passed to the semantic search model `all-MiniLM-L6-v2`. The tags expanded the vocabulary through which the model could produce associations, allowing for more relevant recommendations. Furthermore, the tags accounted for users whose queries were brief, abstract, or lacking in specialized perfume terminology.
 
-After obtaining the embeddings for the user's query and the generated tags, we proceed to compare them to the perfume embeddings generated from our primary datasets. To build the perfume embeddings, we combined notes, accords, and user reviews, where reviews were first classified by sentiment using a [pretrained `DistilBERT` model](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), with positive reviews receiving higher weights. Based on embedding similarity, we return the top-k most relevant perfumes to user query.
+Our recommender combines two models: `mistral-7B-v0.3` and `all-MiniLM-L6-v2`. We applied continued pre-training to Mistral using 2055 entries of descriptive perfume data, using it to generate natural-language explanations connecting recommendations to the user’s query. In addition, we experimented with a fine-tuned `Unsloth/LLaMA-3.2-3B-Instruct` model to generate similarly styled explanations with smaller memory and compute requirements. We further fine-tuned Mistral with 2000 question-answer pairs mapping abstract perfume queries to relevant perfume notes. The user’s query and the generated tags were then passed to the semantic search model `all-MiniLM-L6-v2`. The tags expanded the vocabulary through which the model could produce associations, allowing for more relevant recommendations. Furthermore, the tags accounted for users whose queries were brief, abstract, or lacking in specialized perfume terminology.  
 
+After obtaining the embeddings for the user's query and the generated tags, we proceed to compare them to the perfume embeddings generated from our primary datasets. To build the perfume embeddings, we combined notes, accords, and user reviews, where reviews were first classified by sentiment using a [pretrained `DistilBERT` model](https://huggingface.co/distilbert/distilbert-base-uncased-finetuned-sst-2-english), with positive reviews receiving higher weights. Based on embedding similarity, we return the top-k most relevant perfumes to user query.  
 
 ## Testing
-We broke our test down into two parts: one on standard user queries, and the other on non-standard user queries. The motivation behind this split is the different levels of user experiences.
 
-Experienced users tend to know exactly what accords and notes that they are looking for. They might ask directly “I want something {*accord*} with {*note1*} and {*note2*} {*occasion*}”. These are standard queries with direct references to perfume-related terms, so we skip the tag generation step and feed them into the BERT-model for scoring.
+We broke our test down into two parts: one on standard user queries, and the other on non-standard user queries. The motivation behind this split is the different levels of user experiences.  
 
-On the other hand, new users might ask more open-ended prompts such as “What perfumes capture the essence of a natural new home?”. These are non-standard queries, lacking terms related directly to perfumes. Thus, we use our tag-generation LLM to construct note-related and accord-related tags before performing the recommendations. 
+Experienced users tend to know exactly what accords and notes that they are looking for. They might ask directly “I want something {*accord*} with {*note1*} and {*note2*} {*occasion*}”. These are standard queries with direct references to perfume-related terms, so we skip the tag generation step and feed them into the BERT-model for scoring.  
 
-For both types of queries, the models return top-3 highest scored perfumes. Since there is no existing ground truth, we conducted a human labeling preference test. We act as human labelers to rate the relevance of notes and accords of each recommended perfume to user queries: 
-- Yes (`1`) means the perfume is well-related to the query.
-- No (`0`) means the perfume is poorly related.
+On the other hand, new users might ask more open-ended prompts such as “What perfumes capture the essence of a natural new home?”. These are non-standard queries, lacking terms related directly to perfumes. Thus, we use our tag-generation LLM to construct note-related and accord-related tags before performing the recommendations.  
 
-For each perfume, we computed the proportion of “yes” labels and then averaged over all perfumes and queries. The results tell us that our models perfume consistently well on both types of queries:
-- Without tags (standard queries): Average fraction of relevant items in top-k = 0.89 (across 34 queries and 102 ratings)
-- With tags (non-standard queries): Average fraction of relevant items in top-k = 0.88 (across 34 queries and 102 ratings)
+For both types of queries, the models return top-3 highest scored perfumes. Since there is no existing ground truth, we conducted a human labeling preference test. We act as human labelers to rate the relevance of notes and accords of each recommended perfume to user queries:  
+- Yes (`1`) means the perfume is well-related to the query.  
+- No (`0`) means the perfume is poorly related.  
 
-
+For each perfume, we computed the proportion of “yes” labels and then averaged over all perfumes and queries. The results tell us that our models perfume consistently well on both types of queries:  
+- Without tags (standard queries): Average fraction of relevant items in top-k = 0.89 (across 34 queries and 102 ratings)  
+- With tags (non-standard queries): Average fraction of relevant items in top-k = 0.88 (across 34 queries and 102 ratings)  
 
 ## Future
-We would like to answer the question: What does it smell like in a movie or a book? We can easily access the summaries of the works through public datasets, and create the embeddings with the exact same models. The users can search for and select a work in the library, and the recommender goes through the same process and recommends perfumes. 
 
-Please stay tuned as we **make scents**!
+We would like to answer the question: What does it smell like in a movie or a book? We can easily access the summaries of the works through public datasets, and create the embeddings with the exact same models. The users can search for and select a work in the library, and the recommender goes through the same process and recommends perfumes.  
+
+Please stay tuned as we **make scents**!  
 
 ## Acknowledgements
-We would like to thank Yevgeniya (Jonah) Tarasova for creating the wonderful collaborative-filtering model in the Data Science Bootcamp hosted by the Erdös Institute in Spring 2025. Thank you our mentors Steven Gubkin and Aditya Chander, for all the brilliant insights and inspirations. 
 
-A warm hug to Katherine Martin, whose path has overlapped with ours, and thank you for your interests and expertise in scents and their effects on human emotions. We appreciate the help and advice from Lindsay Warrenburg, our mentor in the Deep Learning Bootcamp Summer 2025.
+We would like to thank Yevgeniya (Jonah) Tarasova for creating the wonderful collaborative-filtering model in the Data Science Bootcamp hosted by the Erdös Institute in Spring 2025. Thank you our mentors Steven Gubkin and Aditya Chander, for all the brilliant insights and inspirations.  
+
+A warm hug to Katherine Martin, whose path has overlapped with ours, and thank you for your interests and expertise in scents and their effects on human emotions. We appreciate the help and advice from Lindsay Warrenburg, our mentor in the Deep Learning Bootcamp Summer 2025.  
