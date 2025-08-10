@@ -76,7 +76,7 @@ with col2:
     width: 100%;
     opacity: 0;
     color: grey;
-    text-align: left;
+    text-align: center;
     animation: rotate {total_duration}s ease-in-out infinite;
     }}
     {"".join(

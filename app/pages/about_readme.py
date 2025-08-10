@@ -63,14 +63,19 @@ After obtaining the embeddings for the user's query and the generated tags, we p
 
 
 ## Testing
-We tested our system on two query types: standard and non-standard, based on different levels of user experience. Experienced users, who are familiar with perfume terms, might ask standard queries such as “I want something *{accord}* with *{note1}* and *{note2}* for *{occasion}*”. These queries contain direct references to perfume-related terms, so we skip the tag generation step and feed them directly into the BERT-model for scoring. On the other hand, non-standard queries such as “What perfumes capture the essence of a natural new home?” potentially from new users who do not know perfume-related vocabulary. For these, we use an LLM to generate accord-related and note-related tags before performing the recommendations. 
+We broke our test down into two parts: one on standard user queries, and the other on non-standard user queries. The motivation behind this split is the different levels of user experiences.
 
-Each model returns the top-3 perfumes per query. Since there is no ground truth, we used human preference labeling: Yes (1) means the perfume is well-related to the query, and no (0) means the perfume is poorly related.
+Experienced users tend to know exactly what accords and notes that they are looking for. They might ask directly “I want something {*accord*} with {*note1*} and {*note2*} {*occasion*}”. These are standard queries with direct references to perfume-related terms, so we skip the tag generation step and feed them into the BERT-model for scoring.
 
-We then averaged the “yes” ratios across all ratings. The final results tell us that our models perform consistently well on both types of queries :
-Without tags (standard queries): Average fraction of relevant items in top-k = 0.89, or 89% (across 34 queries and 102 ratings).
-With tags (non-standard queries): Average fraction of relevant items in top-k = 0.88, or 88% (across 34 queries and 102 ratings).
+On the other hand, new users might ask more open-ended prompts such as “What perfumes capture the essence of a natural new home?”. These are non-standard queries, lacking terms related directly to perfumes. Thus, we use our tag-generation LLM to construct note-related and accord-related tags before performing the recommendations. 
 
+For both types of queries, the models return top-3 highest scored perfumes. Since there is no existing ground truth, we conducted a human labeling preference test. We act as human labelers to rate the relevance of notes and accords of each recommended perfume to user queries: 
+- Yes (`1`) means the perfume is well-related to the query.
+- No (`0`) means the perfume is poorly related.
+
+For each perfume, we computed the proportion of “yes” labels and then averaged over all perfumes and queries. The results tell us that our models perfume consistently well on both types of queries:
+- Without tags (standard queries): Average fraction of relevant items in top-k = 0.89 (across 34 queries and 102 ratings)
+- With tags (non-standard queries): Average fraction of relevant items in top-k = 0.88 (across 34 queries and 102 ratings)
 
 ## Future
 We would like to answer the question: What does it smell like in a movie or a book? We can easily access the summaries of the works through public datasets, and create the embeddings with the exact same models. The users can search for and select a work in the library, and the recommender goes through the same process and recommends perfumes. 
