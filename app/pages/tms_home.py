@@ -126,7 +126,7 @@ if generate_recommendations:
         st.markdown("Instead, we will show you the Perfume of the Day 100 years ago on this date: ")
         st.markdown(f':material/calendar_today: {today_100}')
         # today_100 = datetime.date.toordinal(today_100)
-        df_fra_standard = pd.read_csv(f'{path_data}fra_standard.csv')
+        df_fra_standard = pd.read_csv(f'{path_data}tms_lite/fra_standard.csv')
         index_potd = df_fra_standard.sample(1, random_state=datetime.date.toordinal(today_100)).index[0]
         potd = df_fra_standard.iloc[index_potd]
 

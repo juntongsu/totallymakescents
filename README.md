@@ -41,19 +41,59 @@ flowchart TB
 ```text
 totallymakescents/
 ├── app/
+│   ├── images/
+│   │   └── tms_logo.png
 │   ├── pages/
-│   │   ├── home.py
-│   │   └── tms1.py
-│   └── images/
-│   ├── totallymakescents.py
+│   │   ├── about_help.py
+│   │   ├── about_readme.py
+│   │   ├── about_us.py
+│   │   ├── explore_exhibition.py
+│   │   ├── explore_potd.py
+│   │   ├── explore_tableau.py
+│   │   ├── tms_home_colab_deployment.ipynb
+│   │   ├── tms_home.py
+│   │   ├── tms_lite.py
+│   │   └── tms_pro.py
+│   ├── environment.yml
+│   └── totallymakescents.py
+├── archive/
 ├── data/
-│   ├── combined_df_classify_reviews.parquet
-├── web_scraping/
+│   ├── tms_lite/
+│   ├── tms_pro/
+│   └── data_download.ipynb
 ├── data_analysis/
+│   ├── accords.twbx
+│   └── perc_by_features.twbx
 ├── generated_data/
+│   ├── findascent_note_descriptions.csv
+│   ├── notes.csv
+│   ├── perfume_descriptions_creative.csv
+│   ├── perfume_descriptions_poetic.csv
+│   ├── perfume_descriptions.csv
+│   ├── generating_training_data.ipynb
+│   ├── cpt_perfume.jsonl
+│   ├── training_data.jsonl
+│   └── training_data_chatml.jsonl
 ├── models/
+│   ├── llama-model/
+│   ├── mistral_7B-v0.3-cpt.ipynb
+│   ├── mistral_7B-v0.3-fine_tune.ipynb
+│   ├── generating_training_data.ipynb
+│   ├── recommend_with_tags.ipynb
+│   ├── recommend_without_tags.ipynb
+│   ├── streamlit_llm_with_tags_py.ipynb
+│   └── streamlit_llm_without_tags_py.ipynb
 ├── recommender/
-├── tests/
+│   ├── version_delta/
+│   |   └── recommender_func.py
+│   └── version_epsilon/
+│       ├── helper_funcs.py
+│       └── recommender_func.py
+├── web_scraping/
+│   ├── data/
+│   ├── frag_notes_scrape.ipynb
+│   ├── frag_perf_scrape.ipynb
+│   └── fragrantica_overview.csv
 └── README.md    
 ```    
 
