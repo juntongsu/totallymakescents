@@ -29,7 +29,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import ChromeType
+# from webdriver_manager.core.os_manager import ChromeType
 import re
 
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
@@ -55,22 +55,23 @@ def scrape_perfume(website):
     # CHROME SCRAPING OPTIONS
     opts = Options()
     opts.add_argument("--headless")
-    opts.add_argument("--no-sandbox")
-    opts.add_argument("--disable-dev-shm-usage")
+    # opts.add_argument("--no-sandbox")
+    # opts.add_argument("--disable-dev-shm-usage")
     opts.add_argument("--disable-gpu")
-    opts.add_argument("--remote-debugging-port=9222")
+    # opts.add_argument("--remote-debugging-port=9222")
     opts.add_argument("--window-size=1920,1080")
     # Mild “stealth”:
-    opts.add_argument("--disable-blink-features=AutomationControlled")
-    opts.add_experimental_option("excludeSwitches", ["enable-automation"])
-    opts.add_experimental_option('useAutomationExtension', False)
-    opts.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36")
+    # opts.add_argument("--disable-blink-features=AutomationControlled")
+    # opts.add_experimental_option("excludeSwitches", ["enable-automation"])
+    # opts.add_experimental_option('useAutomationExtension', False)
+    # opts.add_argument("--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36")
     # In some Colab images, the binary path is needed explicitly:
     # opts.binary_location = shutil.which('chromium')
     # opts.binary_location = '/home/appuser/venv/chromedriver' # '/home/appuser/venv/chromium-browser' # "/usr/bin/chromium-browser"  # or "/usr/bin/chromium"
     # opts.setBrowserVersion("113.0.5672.126")
-    opts.add_argument("--browserVersion=113")
-    service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM, driver_version='113.0.5672.63').install())
+    # opts.add_argument("--browserVersion=113")
+    service=Service(ChromeDriverManager().install())
+    # service=Service(ChromeDriverManager(chrome_type=ChromeType.CHROMIUM, driver_version='113.0.5672.63').install())
     driver = webdriver.Chrome(service=service, options=opts)
 
     try:

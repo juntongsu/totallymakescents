@@ -12,7 +12,7 @@ dependencies:
     - st-files-connection
     - gcsfs
     - beautifulsoup4
-    - selenium == 4.11.2
+    - selenium
     - webdriver-manager
     # - chromedriver-autoinstaller
     # - chromedriver-binary-auto
