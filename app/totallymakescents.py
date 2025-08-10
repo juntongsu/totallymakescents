@@ -24,6 +24,7 @@ pages = {
     'About': [
         st.Page('pages/about_us.py', title = 'Meet the Team', icon = ':material/person:'),
         st.Page('pages/help.py', title = 'Help', icon = ':material/help:'),
+        st.Page('pages/test.py', title = 'Test', icon = ':material/neurology:'),
     ]
 }
 
