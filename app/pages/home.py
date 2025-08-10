@@ -478,7 +478,7 @@ if generate_recommendations:
         with st.spinner('Making scents...'):
             st.markdown("Our models require much more resources than what Streamlit Cloud provides. ")
             st.markdown("Instead, we will show you the Perfume of the Day 100 years ago on this date:")
-            today = datetime.date.toordinal(datetime.date.today().replace(year=datetime.date.today.year - 100))
+            today = datetime.date.toordinal(datetime.date.today().replace(year=datetime.date.today().year - 100))
             df_fra_standard = pd.read_csv(f'{path_data}fra_standard.csv')
             index_potd = df_fra_standard.sample(1, random_state=today).index[0]
             potd = df_fra_standard.iloc[index_potd]
