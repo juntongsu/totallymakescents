@@ -35,7 +35,7 @@ st.write(':material/calendar_today: ', datetime.date.today())
 # Load data and choose perfume of the day
 # -------------------------------------------------------------------------
 today = datetime.date.toordinal(datetime.date.today())
-df_fra_standard = pd.read_csv(f'{path_data}fra_standard.csv')
+df_fra_standard = pd.read_csv(f'{path_data}tms_lite/fra_standard.csv')
 index_potd = df_fra_standard.sample(1, random_state=today-1).index[0]
 potd = df_fra_standard.iloc[index_potd]
 

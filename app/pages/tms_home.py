@@ -169,6 +169,6 @@ if generate_recommendations:
         
         st.divider()
         st.subheader("Can't get enough of :rainbow[TotallyMakeScents]?")
-        st.page_link('pages/tms_newbee.py', label='Check out some example searches in our Exhibition Room :material/arrow_outward: ', icon='🖼️')
+        st.page_link('pages/explore_exhibition.py', label='Check out some example searches in our Exhibition Room :material/arrow_outward: ', icon='🖼️')
     else:
         st.warning('Please enter a prompt.')
