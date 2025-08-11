@@ -9,8 +9,8 @@ dependencies:
   - scikit-learn >= 1.4
   - numpy = 1.26.4
   - pip:
-    # - st-files-connection
-    # - gcsfs
+    - st-files-connection
+    - gcsfs
     # - plotly
     - streamlit-extras
     - tableauserverclient
