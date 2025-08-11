@@ -15,7 +15,7 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 from recommender.version_epsilon.helper_funcs import *
 
 conn = st.connection('gcs', type=FilesConnection)
-df_exhibition = conn.read("totallymakescents/exhibition.parquet", input_format="parquet", ttl=600)
+df_exhibition = conn.read("totallymakescents/exhibition.parquet", input_format="parquet", ttl=60)
 button_names = df_exhibition['user_input'].unique()
 
 df_search = pd.read_parquet('{}tms_pro/search_filter.parquet'.format(path_data))
@@ -47,7 +47,7 @@ with col2:
         placeholder='Select your scent inspiration here...'
     )
 
-with st.container(border=True):
+with st.container():
     # st.write('We made some scents for you... ')
     index = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['index'].astype(int)
     explanations = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['explanation']
@@ -87,3 +87,10 @@ with st.container(border=True):
         
         st.write('Explanation: ')
         st.write(explanation)
+
+        sentiment_mapping = [":material/thumb_down:", ":material/thumb_up:"]
+        selected = st.feedback("thumbs", key=idx)
+        if selected is not None:
+            st.markdown('Thank you!')
+        
+        st.divider()
