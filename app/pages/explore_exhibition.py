@@ -3,8 +3,6 @@ import pandas as pd
 import sys
 import pathlib
 
-from st_files_connection import FilesConnection
-
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
 path_image = path_app + 'images/'
@@ -31,20 +29,9 @@ with col1:
 with col2:
     st.title('Exhibition Room')
 
-@st.cache_resource
-def load_dataframe():
-    return pd.read_parquet('{}tms_pro/search_filter.parquet'.format(path_data))
-
-try:
-    # st.write("📄 Loading data...")
-    df_search = load_dataframe()
-    # st.success("✅ Data loaded!")
-except Exception as e:
-    st.error(f"❌ Error loading data: {e}")
-    st.stop()
-
-df_notes_accords = pd.read_csv(f'{path_total}generated_data/notes.csv')
-df_exhibition = pd.read_parquet(f'{path_data}exhibition/')
+df_search = pd.read_parquet('{}tms_pro/search_filter.parquet'.format(path_data))
+df_notes_accords = pd.read_csv('{}generated_data/notes.csv'.format(path_total))
+df_exhibition = pd.read_parquet('{}exhibition/'.format(path_data))
 # df_notes_accords = pd.read_csv('../generated_data/notes.csv')
 # df_exhibition = pd.read_parquet('../data/exhibition/')
 
