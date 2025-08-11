@@ -33,8 +33,7 @@ with col2:
 
 @st.cache_resource
 def load_dataframe():
-    conn = st.connection('gcs', type=FilesConnection)
-    return conn.read("totallymakescents/data/combined_df_classify_reviews.parquet", input_format="parquet", ttl=600)
+    return pd.read_parquet('{}tms_pro/search_filter.parquet'.format(path_data))
 
 try:
     # st.write("📄 Loading data...")
