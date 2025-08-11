@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import sys
 import pathlib
+from st_files_connection import FilesConnection
 
 path_total = 'https://raw.githubusercontent.com/juntongsu/totallymakescents/refs/heads/main/'
 path_app = path_total + 'app/'
@@ -29,11 +30,11 @@ with col1:
 with col2:
     st.title('Exhibition Room')
 
+conn = st.connection('gcs', type=FilesConnection)
+df_exhibition = conn.read("totallymakescents/exhibition.parquet", input_format="parquet", ttl=600)
+
 df_search = pd.read_parquet('{}tms_pro/search_filter.parquet'.format(path_data))
 df_notes_accords = pd.read_csv('{}generated_data/notes.csv'.format(path_total))
-df_exhibition = pd.read_parquet('{}exhibition/'.format(path_data))
-# df_notes_accords = pd.read_csv('../generated_data/notes.csv')
-# df_exhibition = pd.read_parquet('../data/exhibition/')
 
 button_names = df_exhibition['user_input'].unique()
 
@@ -52,8 +53,8 @@ with queries_container:
                 explanations = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['explanation']
                 for idx, explanation in zip(index, explanations):
                     potd = df_search.iloc[idx]
-                    accord_data = potd['Accords']
-                    accord_data = [ str(potd.get(f'mainaccord{i}', '')) for i in range(1, 6) ]
+                    accord_data = potd['Accords'].str.split(',')
+                    # accord_data = [ str(potd.get(f'mainaccord{i}', '')) for i in range(1, 6) ]
 
                     potd_all_notes = potd['Top'] + ', ' + potd['Middle'] + ', ' + potd['Base']
                     potd_all_notes_series = pd.Series(potd_all_notes.split(', '), name='note')
