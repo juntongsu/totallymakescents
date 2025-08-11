@@ -53,7 +53,7 @@ with queries_container:
                 explanations = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['explanation']
                 for idx, explanation in zip(index, explanations):
                     potd = df_search.iloc[idx]
-                    accord_data = potd['Accords'].str.split(',')
+                    # accord_data = potd['Accords'].split(',')
                     # accord_data = [ str(potd.get(f'mainaccord{i}', '')) for i in range(1, 6) ]
 
                     potd_all_notes = potd['Top'] + ', ' + potd['Middle'] + ', ' + potd['Base']
