@@ -14,6 +14,16 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent.parent))
 # from app.pages.helper_funcs import *
 from recommender.version_epsilon.helper_funcs import *
 
+conn = st.connection('gcs', type=FilesConnection)
+df_exhibition = conn.read("totallymakescents/exhibition.parquet", input_format="parquet", ttl=600)
+button_names = df_exhibition['user_input'].unique()
+
+df_search = pd.read_parquet('{}tms_pro/search_filter.parquet'.format(path_data))
+df_notes_accords = pd.read_csv('{}generated_data/notes.csv'.format(path_total))
+
+
+
+
 st.set_page_config(
     page_title='Exhibition Room',
     layout="wide",
@@ -29,63 +39,51 @@ with col1:
             use_container_width = False)
 with col2:
     st.title('Exhibition Room')
+    st.divider()
+    button_name = st.selectbox(
+        'Tell us your story, and we will... ',
+        button_names,
+        index=None,
+        placeholder='Select your scent inspiration here...'
+    )
 
-conn = st.connection('gcs', type=FilesConnection)
-df_exhibition = conn.read("totallymakescents/exhibition.parquet", input_format="parquet", ttl=600)
+with st.container(border=True):
+    # st.write('We made some scents for you... ')
+    index = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['index'].astype(int)
+    explanations = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['explanation']
+    for idx, explanation in zip(index, explanations):
+        potd = df_search.iloc[idx]
 
-df_search = pd.read_parquet('{}tms_pro/search_filter.parquet'.format(path_data))
-df_notes_accords = pd.read_csv('{}generated_data/notes.csv'.format(path_total))
+        potd_all_notes = potd['Top'] + ', ' + potd['Middle'] + ', ' + potd['Base']
+        potd_all_notes_series = pd.Series(potd_all_notes.split(', '), name='note')
+        df_potd_notes_accords = pd.merge(left=potd_all_notes_series, right=df_notes_accords[['note_group', 'note']], how='left', on='note')
+        potd_accords = df_potd_notes_accords['note_group'].value_counts()
 
-button_names = df_exhibition['user_input'].unique()
+        col1, col2 = st.columns([1,10])
+        with col1:
+            img = get_img_fragrantica(potd['url'])
+            st.image(image = img,
+                    width = 100,
+                    use_container_width = False)
+        with col2:
+            st.header(':material/fragrance: {name} by {brand}'.format(name=potd['Perfume'],brand=potd['Brand']))
+            st.link_button(
+                'Find more details and Reviews at Fragrantica.com :material/arrow_outward: ',
+                f"{potd['url']}",
+            )
 
-queries_container = st.container(border=True)
-results_container = st.container(border=True)
+        col1, col2= st.columns([4, 6])
 
-with queries_container:
-    for button_name in button_names:
-        if st.button(button_name, key=button_name):
-            with results_container:
-                st.write('User query: ', button_name)
-                st.divider()
-                st.write('We made some scents for you... ')
-                index = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['index'].astype(int)
-                # urls = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['url']
-                explanations = df_exhibition[df_exhibition['user_input'] == f"{button_name}"]['explanation']
-                for idx, explanation in zip(index, explanations):
-                    potd = df_search.iloc[idx]
-                    # accord_data = potd['Accords'].split(',')
-                    # accord_data = [ str(potd.get(f'mainaccord{i}', '')) for i in range(1, 6) ]
-
-                    potd_all_notes = potd['Top'] + ', ' + potd['Middle'] + ', ' + potd['Base']
-                    potd_all_notes_series = pd.Series(potd_all_notes.split(', '), name='note')
-                    df_potd_notes_accords = pd.merge(left=potd_all_notes_series, right=df_notes_accords[['note_group', 'note']], how='left', on='note')
-                    potd_accords = df_potd_notes_accords['note_group'].value_counts()
-
-                    col1, col2 = st.columns([1,10])
-                    with col1:
-                        img = get_img_fragrantica(potd['url'])
-                        st.image(image = img,
-                                width = 100,
-                                use_container_width = False)
-                    with col2:
-                        st.header(':material/fragrance: {name} by {brand}'.format(name=potd['Perfume'],brand=potd['Brand']))
-                        st.link_button(
-                            'Find more details and Reviews at Fragrantica.com :material/arrow_outward: ',
-                            f"{potd['url']}",
-                        )
-
-                    col1, col2= st.columns([4, 6])
-
-                    with col1:
-                        st.subheader(':material/ent: Accords')
-                        display_accords(potd_accords)
-                        
-                    with col2:
-                        st.subheader('𓏊 Notes')
-                        st.write(' ')
-                        st.write(f":material/clock_loader_10: Top: {potd['Top']}")
-                        st.write(f":material/clock_loader_40: Middle: {potd['Middle']}")
-                        st.write(f":material/clock_loader_90: Base: {potd['Base']}")
-                    
-                    st.write('Explanation: ')
-                    st.write(explanation)
+        with col1:
+            st.subheader(':material/ent: Accords')
+            display_accords(potd_accords)
+            
+        with col2:
+            st.subheader('𓏊 Notes')
+            st.write(' ')
+            st.write(f":material/clock_loader_10: Top: {potd['Top']}")
+            st.write(f":material/clock_loader_40: Middle: {potd['Middle']}")
+            st.write(f":material/clock_loader_90: Base: {potd['Base']}")
+        
+        st.write('Explanation: ')
+        st.write(explanation)
